@@ -1,0 +1,11 @@
+.link-button {
+	background: #c69963;
+	color: #2c3d4f;
+	font-size: 30px;
+	padding: 8px 6px;
+	transition: all;
+	width: 400px;
+	&:hover {
+		color: #b78343;
+	}
+}

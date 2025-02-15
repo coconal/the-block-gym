@@ -1,0 +1,18 @@
+.about-content {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	padding: 24px 32px;
+	gap: 4rem;
+}
+
+.p-content {
+	h1 {
+		font-size: 48px;
+		color: #ead5b9;
+	}
+	p {
+		font-size: 18px;
+		color: #d4dee7;
+	}
+}
