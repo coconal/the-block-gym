@@ -39,11 +39,7 @@ export const authOptions = {
 			}
 			return token
 		},
-		async session({ session, token }) {
-			session.user.role = token.role
-			session.user.address = token.address
-			return session
-		},
+		async signIn() {},
 	},
 	secret: process.env.NEXTAUTH_SECRET!,
 	session: {
@@ -51,4 +47,4 @@ export const authOptions = {
 	},
 }
 
-export default NextAuth(authOptions)
+export const { handlers, signIn, signOut, auth } = NextAuth(authOptions)
