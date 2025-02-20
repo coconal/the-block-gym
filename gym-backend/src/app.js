@@ -5,6 +5,7 @@ import {
 	getContract,
 	http,
 	recoverMessageAddress,
+	toHex,
 } from "viem"
 import { mainnet, hardhat } from "viem/chains"
 import express from "express"
@@ -29,9 +30,6 @@ const walletClient = createWalletClient({
 	transport: http(),
 })
 
-/**
- *
- */
 const contract = getContract({
 	...ContractConfig,
 	client: { public: publicClient, wallet: walletClient },
@@ -42,9 +40,15 @@ app.use(express.json())
 
 // 登录接口
 app.post("/api/user/login", async (req, res) => {
-	const { message, signature, address } = req.body
+	const { signature, address } = req.body
 
 	try {
+		//TODO
+		/**
+		 * get nonce from signature
+		 * const message = "login message&nunce:${nonce}"
+		 */
+
 		// 验证签名
 		const recoveredAddress = await recoverMessageAddress({
 			message,
@@ -58,6 +62,9 @@ app.post("/api/user/login", async (req, res) => {
 		const token = jwt.sign({ address }, JWT_SECRET, {
 			expiresIn: "1h",
 		})
+		res.cookie("jwt", {
+			httpOnly: true,
+		})
 
 		res.status(200).json({ token })
 	} catch (error) {
@@ -66,13 +73,35 @@ app.post("/api/user/login", async (req, res) => {
 	}
 })
 
+// protect
+app.get("/api/user/:useraddress", async (req, res) => {
+	try {
+		const { useraddress } = req.params
+		// 验证签名
+		const result = await contract.read.getUser([useraddress])
+
+		const data = {
+			usertype: result[0],
+			registrationDate: Number(result[1]),
+			address: result[2],
+		}
+
+		res.status(200).json({
+			data,
+		})
+	} catch (error) {
+		console.error("Login error:", error)
+		res.status(500).json({ error: "Internal server error" })
+	}
+})
+
 // 注册接口
 app.post("/api/user/signup", async (req, res) => {
-	const { usertype, name, address } = req.body
+	const { usertype, address } = req.body
 	// console.log(usertype, name, address)
 
 	try {
-		const datahash = await contract.write.registerUser([usertype, name, address])
+		const datahash = await contract.write.registerUser([usertype, address])
 
 		res.status(201).json({
 			datahash,
@@ -98,6 +127,30 @@ app.get("/api/profile", async (req, res) => {
 		console.log(txHash)
 	} catch (error) {
 		res.status(401).json({ error: "Invalid token" })
+	}
+})
+
+app.get("/api/coach/:coachAddress", async (req, res) => {
+	try {
+		const { coachAddress } = req.params
+
+		const result = await contract.getEvents.CoachIsVerified({ coachAddress: coachAddress })
+		/**
+		 *  args: {
+			coachAddress: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
+			verifiedHash: 'dddddddddddddddddddddddddddddddddddddddddddddd'
+			},
+		 */
+		const data = {
+			...result[0].args,
+		}
+
+		res.status(200).json({
+			data,
+		})
+	} catch (error) {
+		console.error("server error:", error)
+		res.status(500).json({ error: "Internal server error" })
 	}
 })
 
