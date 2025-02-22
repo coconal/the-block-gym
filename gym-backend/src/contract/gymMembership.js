@@ -5,29 +5,6 @@ export const ContractConfig = {
 			inputs: [
 				{
 					internalType: "address",
-					name: "userAddress",
-					type: "address",
-				},
-				{
-					internalType: "uint256",
-					name: "id",
-					type: "uint256",
-				},
-				{
-					internalType: "uint256",
-					name: "extraDuration",
-					type: "uint256",
-				},
-			],
-			name: "extendMembership",
-			outputs: [],
-			stateMutability: "payable",
-			type: "function",
-		},
-		{
-			inputs: [
-				{
-					internalType: "address",
 					name: "initialOwner",
 					type: "address",
 				},
@@ -182,24 +159,6 @@ export const ContractConfig = {
 			type: "event",
 		},
 		{
-			inputs: [
-				{
-					internalType: "address",
-					name: "coach",
-					type: "address",
-				},
-				{
-					internalType: "uint256",
-					name: "duration",
-					type: "uint256",
-				},
-			],
-			name: "purchaseMembership",
-			outputs: [],
-			stateMutability: "payable",
-			type: "function",
-		},
-		{
 			anonymous: false,
 			inputs: [
 				{
@@ -217,93 +176,6 @@ export const ContractConfig = {
 			],
 			name: "RefundIssued",
 			type: "event",
-		},
-		{
-			inputs: [
-				{
-					internalType: "enum GymMembership.UserType",
-					name: "_userType",
-					type: "uint8",
-				},
-				{
-					internalType: "string",
-					name: "_name",
-					type: "string",
-				},
-				{
-					internalType: "address",
-					name: "userAddress",
-					type: "address",
-				},
-			],
-			name: "registerUser",
-			outputs: [],
-			stateMutability: "nonpayable",
-			type: "function",
-		},
-		{
-			inputs: [
-				{
-					internalType: "address",
-					name: "user",
-					type: "address",
-				},
-				{
-					internalType: "uint256",
-					name: "id",
-					type: "uint256",
-				},
-			],
-			name: "releaseFunds",
-			outputs: [],
-			stateMutability: "nonpayable",
-			type: "function",
-		},
-		{
-			inputs: [],
-			name: "renounceOwnership",
-			outputs: [],
-			stateMutability: "nonpayable",
-			type: "function",
-		},
-		{
-			inputs: [
-				{
-					internalType: "uint256",
-					name: "id",
-					type: "uint256",
-				},
-			],
-			name: "requestRefund",
-			outputs: [],
-			stateMutability: "nonpayable",
-			type: "function",
-		},
-		{
-			inputs: [
-				{
-					internalType: "uint8",
-					name: "fee",
-					type: "uint8",
-				},
-			],
-			name: "setPlatformFee",
-			outputs: [],
-			stateMutability: "nonpayable",
-			type: "function",
-		},
-		{
-			inputs: [
-				{
-					internalType: "address",
-					name: "newOwner",
-					type: "address",
-				},
-			],
-			name: "transferOwnership",
-			outputs: [],
-			stateMutability: "nonpayable",
-			type: "function",
 		},
 		{
 			anonymous: false,
@@ -327,19 +199,6 @@ export const ContractConfig = {
 		{
 			inputs: [
 				{
-					internalType: "string",
-					name: "ipfsCertHash",
-					type: "string",
-				},
-			],
-			name: "verifiedCoach",
-			outputs: [],
-			stateMutability: "nonpayable",
-			type: "function",
-		},
-		{
-			inputs: [
-				{
 					internalType: "address",
 					name: "",
 					type: "address",
@@ -354,6 +213,29 @@ export const ContractConfig = {
 				},
 			],
 			stateMutability: "view",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "address",
+					name: "userAddress",
+					type: "address",
+				},
+				{
+					internalType: "uint256",
+					name: "id",
+					type: "uint256",
+				},
+				{
+					internalType: "uint256",
+					name: "extraDuration",
+					type: "uint256",
+				},
+			],
+			name: "extendMembership",
+			outputs: [],
+			stateMutability: "payable",
 			type: "function",
 		},
 		{
@@ -486,11 +368,6 @@ export const ContractConfig = {
 					type: "uint8",
 				},
 				{
-					internalType: "string",
-					name: "name",
-					type: "string",
-				},
-				{
 					internalType: "uint256",
 					name: "registrationDate",
 					type: "uint256",
@@ -593,6 +470,106 @@ export const ContractConfig = {
 			inputs: [
 				{
 					internalType: "address",
+					name: "coach",
+					type: "address",
+				},
+				{
+					internalType: "uint256",
+					name: "duration",
+					type: "uint256",
+				},
+			],
+			name: "purchaseMembership",
+			outputs: [],
+			stateMutability: "payable",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "enum GymMembership.UserType",
+					name: "_userType",
+					type: "uint8",
+				},
+				{
+					internalType: "address",
+					name: "userAddress",
+					type: "address",
+				},
+			],
+			name: "registerUser",
+			outputs: [],
+			stateMutability: "nonpayable",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "address",
+					name: "user",
+					type: "address",
+				},
+				{
+					internalType: "uint256",
+					name: "id",
+					type: "uint256",
+				},
+			],
+			name: "releaseFunds",
+			outputs: [],
+			stateMutability: "nonpayable",
+			type: "function",
+		},
+		{
+			inputs: [],
+			name: "renounceOwnership",
+			outputs: [],
+			stateMutability: "nonpayable",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "uint256",
+					name: "id",
+					type: "uint256",
+				},
+			],
+			name: "requestRefund",
+			outputs: [],
+			stateMutability: "nonpayable",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "uint8",
+					name: "fee",
+					type: "uint8",
+				},
+			],
+			name: "setPlatformFee",
+			outputs: [],
+			stateMutability: "nonpayable",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "address",
+					name: "newOwner",
+					type: "address",
+				},
+			],
+			name: "transferOwnership",
+			outputs: [],
+			stateMutability: "nonpayable",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "address",
 					name: "",
 					type: "address",
 				},
@@ -603,11 +580,6 @@ export const ContractConfig = {
 					internalType: "enum GymMembership.UserType",
 					name: "userType",
 					type: "uint8",
-				},
-				{
-					internalType: "string",
-					name: "name",
-					type: "string",
 				},
 				{
 					internalType: "uint256",
@@ -621,6 +593,24 @@ export const ContractConfig = {
 				},
 			],
 			stateMutability: "view",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "address",
+					name: "coachAddress",
+					type: "address",
+				},
+				{
+					internalType: "string",
+					name: "ipfsCertHash",
+					type: "string",
+				},
+			],
+			name: "verifiedCoach",
+			outputs: [],
+			stateMutability: "nonpayable",
 			type: "function",
 		},
 		{

@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon app.js"
+    "start": "npx nodemon src/app.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +16,9 @@
     "express": "^4.21.2",
     "gym-backend": "file:",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.13.1",
+    "mongoose": "^8.10.1",
+    "morgan": "^1.10.0",
     "viem": "^2.23.2"
   },
   "devDependencies": {
