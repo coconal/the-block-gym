@@ -20,7 +20,6 @@ contract GymMembership is ReentrancyGuard, Ownable {
 
     struct Profile {
         UserType userType;
-        string name;
         uint256 registrationDate;
         bool isActive;
     }
@@ -38,10 +37,12 @@ contract GymMembership is ReentrancyGuard, Ownable {
     mapping(address => bool) public verifiedCoaches;
     // 用户信息
     mapping(address => Profile) public users;
-
+    // 用户上次退款时间
+    mapping(address => mapping(uint256 => uint256)) private lastRefundTime;
     // 平台手续费比例（百分比）
     uint8 public platformFee = 10;
-
+    uint256 public constant REFUND_COOLDOWN = 7 days;
+    uint256 public constant FULL_REFUND_WINDOW = 1 days;
     // 事件
     event MembershipPurchased(
         address indexed user,
@@ -70,25 +71,23 @@ contract GymMembership is ReentrancyGuard, Ownable {
 
     function registerUser(
         UserType _userType,
-        string memory _name,
         address userAddress
     ) external onlyOwner {
         require(users[userAddress].registrationDate == 0, "Already registered");
 
         users[userAddress] = Profile({
             userType: _userType,
-            name: _name,
             registrationDate: block.timestamp,
             isActive: true
         });
-
+        lastRefundTime[userAddress] = block.timestamp;
         emit UserRegistered(userAddress, _userType);
     }
 
-    function verifiedCoach(string memory ipfsCertHash) external onlyOwner {
+    function verifiedCoach(address coachAddress, string memory ipfsCertHash) external onlyOwner {
         require(bytes(ipfsCertHash).length == 46, "Invalid IPFS hash");
-        verifiedCoaches[msg.sender] = true;
-        emit CoachIsVerified(msg.sender, ipfsCertHash);
+        verifiedCoaches[coachAddress] = true;
+        emit CoachIsVerified(coachAddress, ipfsCertHash);
     }
 
     function getMembershipLength(
@@ -98,6 +97,7 @@ contract GymMembership is ReentrancyGuard, Ownable {
     }
 
     // 用户购买会员
+    // frontend
     function purchaseMembership(
         address coach,
         uint256 duration
@@ -138,11 +138,12 @@ contract GymMembership is ReentrancyGuard, Ownable {
     }
 
     // 延长会员有效期
+    // frontend
     function extendMembership(
         address userAddress,
         uint256 id,
         uint256 extraDuration
-    ) external payable onlyOwner {
+    ) external payable nonReentrant {
         Membership storage m = memberships[msg.sender][id];
         require(m.isActive, "No active membership");
 
@@ -181,11 +182,14 @@ contract GymMembership is ReentrancyGuard, Ownable {
     }
 
     // 按服务进度释放资金
+    // owner or coach
     function releaseFunds(
         address user,
         uint256 id
-    ) external nonReentrant onlyOwner {
+    ) external nonReentrant {
         Membership storage membership = memberships[user][id];
+        // bool isAuthed = msg.sender == owner() || msg.sender == membership.privatecoach;
+        // require(isAuthed, "Not authorized");
         // require(
         //     block.timestamp > lastWithdrawTime[msg.sender] + 1 days,
         //     "24h cooldown"
@@ -214,23 +218,46 @@ contract GymMembership is ReentrancyGuard, Ownable {
     }
 
     // 用户退款
+    // frontend
     function requestRefund(uint256 id) external nonReentrant {
         Membership storage membership = memberships[msg.sender][id];
         require(membership.isActive, "Membership not active");
 
+
+         // 检查是否在24小时全额退款窗口内
+        if (block.timestamp <= membership.startTime + FULL_REFUND_WINDOW) {
+            // 全额退款逻辑
+            membership.isActive = false;
+            payable(msg.sender).transfer(membership.totalAmount);
+            emit RefundIssued(msg.sender, membership.totalAmount);
+            return;
+        }
+
+        // 检查退款冷却时间
+        require(
+            block.timestamp - lastRefundTime[msg.sender][id] >= REFUND_COOLDOWN,
+            "Refund cooldown"
+        );
+
+        // 更新最后退款时间
+        lastRefundTime[msg.sender][id] = block.timestamp;
+
+        (uint256 releasable, uint256 platformCut, uint256 coachCut) = getReleaseFunds(msg.sender, id);
         // 计算剩余金额
-        uint256 refundAmount = membership.totalAmount -
-            membership.releasedAmount;
-        membership.totalAmount = 0;
+        uint256 remainingAmount = membership.totalAmount - membership.releasedAmount - releasable;
+        
+        // 重置会员状态
         membership.isActive = false;
 
         // 退款
-        payable(msg.sender).transfer(refundAmount);
-
-        emit RefundIssued(msg.sender, refundAmount);
+        if (platformCut > 0) payable(owner()).transfer(platformCut);
+        if (coachCut > 0) payable(membership.privatecoach).transfer(coachCut);
+        if (remainingAmount > 0) payable(msg.sender).transfer(remainingAmount);
+        emit RefundIssued(msg.sender, remainingAmount);
     }
 
     // 设置平台手续费
+    // admin
     function setPlatformFee(uint8 fee) external onlyOwner {
         require(fee <= 10, "Fee too high");
         platformFee = fee;
@@ -250,14 +277,9 @@ contract GymMembership is ReentrancyGuard, Ownable {
     )
         external
         view
-        returns (
-            UserType userType,
-            string memory name,
-            uint256 registrationDate,
-            bool isActive
-        )
+        returns (UserType userType, uint256 registrationDate, bool isActive)
     {
         Profile memory m = users[user];
-        return (m.userType, m.name, m.registrationDate, m.isActive);
+        return (m.userType, m.registrationDate, m.isActive);
     }
 }
