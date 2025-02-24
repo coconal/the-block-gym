@@ -42,7 +42,7 @@ export default function HeaderNav() {
 			<Space direction="vertical">
 				<Space wrap>
 					<Dropdown menu={{ items }} placement="bottomLeft" arrow>
-						<Link href="/course">
+						<Link href="/dashboard">
 							<h2>Course</h2>
 						</Link>
 					</Dropdown>

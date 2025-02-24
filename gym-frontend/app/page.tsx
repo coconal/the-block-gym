@@ -45,7 +45,7 @@ function Page() {
 						}}
 					>
 						Welcome The Block Gym
-						<LinkButton href="/course" />
+						<LinkButton href="/dashboard" />
 					</div>
 				</div>
 			</div>

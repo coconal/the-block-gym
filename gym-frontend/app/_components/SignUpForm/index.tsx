@@ -5,7 +5,8 @@ import { useRouter } from "next/router"
 import React from "react"
 import { useAccount } from "wagmi"
 import type { FormProps } from "antd"
-import { Button, Checkbox, Form, Input, Radio } from "antd"
+import { Button, Checkbox, Flex, Form, Input, Radio } from "antd"
+import { TextField } from "@mui/material"
 
 interface SignUpFormType {
 	usertype: number
@@ -54,52 +55,54 @@ export default function SignupForm() {
 	function onFinishFailed() {}
 
 	return (
-		<div>
-			<Form
-				action={(formdata: FormData) => {
-					console.log(formdata)
+		<div
+			style={{
+				display: "flex",
+				justifyContent: "center",
+				alignItems: "center",
+				height: "60vh",
+				flexDirection: "column",
+			}}
+		>
+			<Flex
+				vertical
+				gap={20}
+				style={{
+					width: "300px",
 				}}
-				name="basic"
-				labelCol={{ span: 8 }}
-				wrapperCol={{ span: 16 }}
-				style={{ maxWidth: 600 }}
-				initialValues={{ remember: true }}
-				onFinish={onFinish}
-				onFinishFailed={onFinishFailed}
-				autoComplete="off"
 			>
-				<Form.Item label="Radio">
-					<Radio.Group defaultValue={0}>
-						<Radio.Button value={0}>用户</Radio.Button>
-						<Radio.Button value={1}>教练</Radio.Button>
-					</Radio.Group>
-				</Form.Item>
-
-				<Form.Item<FieldType>
-					label="Username"
-					name="username"
-					rules={[{ required: true, message: "Please input your username!" }]}
-				>
-					<Input />
-				</Form.Item>
-				<Form.Item<FieldType>
-					label="address"
-					name="address"
-					rules={[{ required: true, message: "Please input your address!" }]}
-				>
-					<Input />
-				</Form.Item>
-
-				<Form.Item<FieldType> name="remember" valuePropName="checked" label={null}>
-					<Checkbox>Remember me</Checkbox>
-				</Form.Item>
-
-				<Form.Item label={null}>
-					<Button type="primary" htmlType="submit">
-						Submit
-					</Button>
-				</Form.Item>
-			</Form>
+				<TextField
+					id="filled-basic"
+					label="Name"
+					variant="filled"
+					required
+					sx={{
+						backgroundColor: "#2a2d3e", // 深蓝灰色背景
+						borderRadius: "8px",
+						"& .MuiInputBase-input": {
+							color: "#e4e6ef", // 浅灰白色文字
+						},
+						"& .MuiInputLabel-root": {
+							color: "#8b8fa3", // 中灰色标签
+						},
+						"& .MuiInputLabel-root.Mui-focused": {
+							color: "#7367f0", // 紫色聚焦标签
+						},
+						"& .MuiFilledInput-underline:after": {
+							borderBottomColor: "#7367f0", // 紫色下划线
+						},
+						"& .MuiFilledInput-root": {
+							backgroundColor: "#2a2d3e",
+							"&:hover": {
+								backgroundColor: "#323548", // 悬停时稍微亮一点
+							},
+							"&.Mui-focused": {
+								backgroundColor: "#323548",
+							},
+						},
+					}}
+				/>
+			</Flex>
 		</div>
 	)
 }

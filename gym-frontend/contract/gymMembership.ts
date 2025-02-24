@@ -368,11 +368,6 @@ export const wagmiContractConfig = {
 					type: "uint8",
 				},
 				{
-					internalType: "string",
-					name: "name",
-					type: "string",
-				},
-				{
 					internalType: "uint256",
 					name: "registrationDate",
 					type: "uint256",
@@ -497,11 +492,6 @@ export const wagmiContractConfig = {
 					type: "uint8",
 				},
 				{
-					internalType: "string",
-					name: "_name",
-					type: "string",
-				},
-				{
 					internalType: "address",
 					name: "userAddress",
 					type: "address",
@@ -592,11 +582,6 @@ export const wagmiContractConfig = {
 					type: "uint8",
 				},
 				{
-					internalType: "string",
-					name: "name",
-					type: "string",
-				},
-				{
 					internalType: "uint256",
 					name: "registrationDate",
 					type: "uint256",
@@ -612,6 +597,11 @@ export const wagmiContractConfig = {
 		},
 		{
 			inputs: [
+				{
+					internalType: "address",
+					name: "coachAddress",
+					type: "address",
+				},
 				{
 					internalType: "string",
 					name: "ipfsCertHash",
