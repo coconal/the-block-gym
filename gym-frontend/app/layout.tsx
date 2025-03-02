@@ -1,13 +1,11 @@
-import { AntdRegistry } from "@ant-design/nextjs-registry"
+import "@/app/globals.css"
 import "@ant-design/v5-patch-for-react-19"
+import "@rainbow-me/rainbowkit/styles.css"
+import { AntdRegistry } from "@ant-design/nextjs-registry"
 import { Metadata } from "next"
 import { Roboto } from "next/font/google"
-
 import { Providers } from "./providers"
 import Header from "./_components/Header"
-import "@rainbow-me/rainbowkit/styles.css"
-import "@/app/globals.css"
-
 export const metadata: Metadata = {
 	title: {
 		template: "%s / The Block Gym",

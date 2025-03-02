@@ -1,0 +1,23 @@
+.dashboard-layout {
+	display: flex;
+	height: calc(100vh - 130px);
+	gap: 0.5rem;
+	.layout-sider {
+		.ant-layout-sider-children {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+		}
+		background: var(--background);
+		color: var(--foreground);
+		height: 100%;
+	}
+	.border {
+		border-right: 1px solid rgba(217, 217, 217, 0.521);
+	}
+	.layout-content {
+		background: var(--background);
+		color: var(--foreground);
+	}
+}
