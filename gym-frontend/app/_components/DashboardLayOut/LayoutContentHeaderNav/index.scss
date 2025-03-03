@@ -1,0 +1,14 @@
+.custom-menu {
+	width: 80%;
+	.ant-menu-item-selected {
+		color: rgb(94, 178, 235) !important;
+	}
+	.ant-menu-submenu-selected {
+		.ant-menu-title-content {
+			color: rgb(94, 178, 235) !important;
+		}
+		svg {
+			color: rgb(94, 178, 235) !important;
+		}
+	}
+}

@@ -6,7 +6,9 @@ import { Button, Layout, theme } from "antd"
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
 import LayoutSider from "./LayoutSider"
 import { Suspense, useState } from "react"
-import Spinner from "../Loading/Spinner"
+
+import LayoutContentHeaderNav from "./LayoutContentHeaderNav"
+
 const { Header, Content, Sider } = Layout
 
 interface IDashboardLayOut {
@@ -31,11 +33,7 @@ export default function DashboardLayOut({ children }: IDashboardLayOut) {
 					trigger={null}
 					collapsedWidth={80}
 				>
-					<LayoutSider
-						collapsed={collapsed}
-						selectedIndex={selectedIndex}
-						setSelectedIndex={setSelectedIndex}
-					/>
+					<LayoutSider collapsed={collapsed} />
 				</Sider>
 				<Layout style={{ background: "transparent", gap: "15px" }}>
 					<Header style={{ padding: 0, background: "transparent" }}>
@@ -49,18 +47,21 @@ export default function DashboardLayOut({ children }: IDashboardLayOut) {
 								background: "transparent",
 							}}
 						>
-							<Button
-								type="text"
-								icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-								onClick={() => setCollapsed(!collapsed)}
-								style={{
-									fontSize: "16px",
-									height: 64,
-									width: 64,
-									background: "transparent",
-									color: colorBgContainer,
-								}}
-							/>
+							<div style={{ display: "flex", alignItems: "center", gap: "1rem", width: "100%" }}>
+								<Button
+									type="text"
+									icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+									onClick={() => setCollapsed(!collapsed)}
+									style={{
+										fontSize: "16px",
+										height: 64,
+										width: 64,
+										background: "transparent",
+										color: colorBgContainer,
+									}}
+								/>
+								<LayoutContentHeaderNav type={selectedIndex} />
+							</div>
 						</div>
 					</Header>
 					<Content
@@ -75,7 +76,7 @@ export default function DashboardLayOut({ children }: IDashboardLayOut) {
 						}}
 						className="layout-content"
 					>
-						<Suspense fallback={<Spinner />}>{children}</Suspense>
+						{children}
 					</Content>
 				</Layout>
 			</Layout>

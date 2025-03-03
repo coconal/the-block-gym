@@ -20,6 +20,11 @@ export default function HeaderNav() {
 			<ConnectButton
 				label="Connect Wallet"
 				accountStatus={{ smallScreen: "address", largeScreen: "full" }}
+				showBalance={{ smallScreen: false, largeScreen: false }}
+				chainStatus={{
+					largeScreen: "icon",
+					smallScreen: "none",
+				}}
 			/>
 		</Flex>
 	)
