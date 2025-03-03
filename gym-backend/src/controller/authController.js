@@ -1,5 +1,20 @@
 import User from "../model/userModel.js"
 import jwt from "jsonwebtoken"
+import { contract } from "../utils/share.js"
+import { recoverMessageAddress } from "viem"
+
+export const onlyOwner = async (req, res, next) => {
+	try {
+		const { address } = req.user
+		if (address !== process.env.OWNER_ADDRESS) {
+			return res.status(403).json({ error: "FORBIDDEN" })
+		}
+		next()
+	} catch (error) {
+		console.error("Protect error:", error)
+		res.status(500).json({ error: "Internal server error" })
+	}
+}
 
 export const protect = async (req, res, next) => {
 	try {
@@ -26,13 +41,22 @@ export const signup = async (req, res) => {
 	const { address, role } = req.body
 	const usertype = role === "user" ? 0 : 1
 	try {
+		const existingUser = await User.findOne({ address })
+		if (existingUser) {
+			return res.status(409).json({ error: "User already exists" })
+		}
+
 		const datahash = await contract.write.registerUser([usertype, address])
 		const data = await User.create({ ...req.body, verifiedHash: datahash })
 		res.status(201).json({
 			data,
 		})
 	} catch (error) {
-		console.error("Login error:", error)
+		if (error.message.includes("Already registered")) {
+			return res.status(409).json({
+				error: "User already registered on blockchain",
+			})
+		}
 		res.status(500).json({ error: "Internal server error" })
 	}
 }
@@ -56,6 +80,7 @@ export const login = async (req, res) => {
 			message,
 			signature,
 		})
+		console.log(recoveredAddress)
 
 		if (recoveredAddress.toLowerCase() !== address.toLowerCase()) {
 			return res.status(401).json({ error: "Invalid signature" })
@@ -65,7 +90,7 @@ export const login = async (req, res) => {
 		// const newNonce = Math.floor(Math.random() * 1000000)
 		// await User.findByIdAndUpdate(user._id, { nonce: newNonce })
 		// 签发 JWT
-		const token = jwt.sign({ id: user._id, address }, JWT_SECRET, {
+		const token = jwt.sign({ id: user._id, address }, process.env.JWT_SECRET, {
 			expiresIn: "30d",
 		})
 		res.cookie("jwt", token, {

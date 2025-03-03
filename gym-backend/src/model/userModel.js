@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema({
 	verifiedHash: {
 		type: String,
 		required: true,
+		default: "0x0",
 	},
 })
 

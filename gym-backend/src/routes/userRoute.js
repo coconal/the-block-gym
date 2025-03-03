@@ -1,8 +1,12 @@
 import { Router } from "express"
-import { getUser } from "../controller/userController.js"
+import { getMembership, getUser, getUserAllMembership } from "../controller/userController.js"
+import { protect } from "../controller/authController.js"
 
 const router = Router()
 
-router.get("/:useraddres", getUser)
+router.route("/membership").get(protect, getUserAllMembership)
+router.route("/membership/:membershipId").get(protect, getMembership)
+
+router.get("/getMe", protect, getUser)
 
 export default router

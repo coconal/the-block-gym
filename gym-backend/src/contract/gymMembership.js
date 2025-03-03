@@ -197,6 +197,32 @@ export const ContractConfig = {
 			type: "event",
 		},
 		{
+			inputs: [],
+			name: "FULL_REFUND_WINDOW",
+			outputs: [
+				{
+					internalType: "uint256",
+					name: "",
+					type: "uint256",
+				},
+			],
+			stateMutability: "view",
+			type: "function",
+		},
+		{
+			inputs: [],
+			name: "REFUND_COOLDOWN",
+			outputs: [
+				{
+					internalType: "uint256",
+					name: "",
+					type: "uint256",
+				},
+			],
+			stateMutability: "view",
+			type: "function",
+		},
+		{
 			inputs: [
 				{
 					internalType: "address",
@@ -218,11 +244,6 @@ export const ContractConfig = {
 		{
 			inputs: [
 				{
-					internalType: "address",
-					name: "userAddress",
-					type: "address",
-				},
-				{
 					internalType: "uint256",
 					name: "id",
 					type: "uint256",
@@ -236,6 +257,30 @@ export const ContractConfig = {
 			name: "extendMembership",
 			outputs: [],
 			stateMutability: "payable",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "address",
+					name: "userAddress",
+					type: "address",
+				},
+				{
+					internalType: "uint256",
+					name: "_id",
+					type: "uint256",
+				},
+			],
+			name: "getLastRefundTime",
+			outputs: [
+				{
+					internalType: "uint256",
+					name: "",
+					type: "uint256",
+				},
+			],
+			stateMutability: "view",
 			type: "function",
 		},
 		{
@@ -376,6 +421,30 @@ export const ContractConfig = {
 					internalType: "bool",
 					name: "isActive",
 					type: "bool",
+				},
+			],
+			stateMutability: "view",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "address",
+					name: "",
+					type: "address",
+				},
+				{
+					internalType: "uint256",
+					name: "",
+					type: "uint256",
+				},
+			],
+			name: "lastRefundTime",
+			outputs: [
+				{
+					internalType: "uint256",
+					name: "",
+					type: "uint256",
 				},
 			],
 			stateMutability: "view",

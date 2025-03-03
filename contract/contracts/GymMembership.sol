@@ -38,10 +38,12 @@ contract GymMembership is ReentrancyGuard, Ownable {
     // 用户信息
     mapping(address => Profile) public users;
     // 用户上次退款时间
-    mapping(address => mapping(uint256 => uint256)) private lastRefundTime;
+    mapping(address => mapping(uint256 => uint256)) public lastRefundTime;
     // 平台手续费比例（百分比）
     uint8 public platformFee = 10;
+    // 退款间隔
     uint256 public constant REFUND_COOLDOWN = 7 days;
+    // 全退款时间限制
     uint256 public constant FULL_REFUND_WINDOW = 1 days;
     // 事件
     event MembershipPurchased(
@@ -74,13 +76,11 @@ contract GymMembership is ReentrancyGuard, Ownable {
         address userAddress
     ) external onlyOwner {
         require(users[userAddress].registrationDate == 0, "Already registered");
-
         users[userAddress] = Profile({
             userType: _userType,
             registrationDate: block.timestamp,
             isActive: true
         });
-        lastRefundTime[userAddress] = block.timestamp;
         emit UserRegistered(userAddress, _userType);
     }
 
@@ -96,6 +96,9 @@ contract GymMembership is ReentrancyGuard, Ownable {
         return memberships[userAddress].length;
     }
 
+    function getLastRefundTime(address userAddress, uint256 _id) public view returns (uint256) {
+        return  lastRefundTime[userAddress][_id];
+    }
     // 用户购买会员
     // frontend
     function purchaseMembership(
@@ -133,6 +136,7 @@ contract GymMembership is ReentrancyGuard, Ownable {
                 })
             );
         }
+        lastRefundTime[msg.sender][getMembershipLength(msg.sender)-1] = block.timestamp;
 
         emit MembershipPurchased(msg.sender, coach, msg.value, duration);
     }
@@ -140,7 +144,6 @@ contract GymMembership is ReentrancyGuard, Ownable {
     // 延长会员有效期
     // frontend
     function extendMembership(
-        address userAddress,
         uint256 id,
         uint256 extraDuration
     ) external payable nonReentrant {
@@ -150,7 +153,7 @@ contract GymMembership is ReentrancyGuard, Ownable {
         m.totalAmount += msg.value;
         m.duration += extraDuration;
 
-        emit DurationExtended(userAddress, id, extraDuration);
+        emit DurationExtended(msg.sender, id, extraDuration);
     }
 
     // 获取教练可提取收益
@@ -222,12 +225,11 @@ contract GymMembership is ReentrancyGuard, Ownable {
     function requestRefund(uint256 id) external nonReentrant {
         Membership storage membership = memberships[msg.sender][id];
         require(membership.isActive, "Membership not active");
-
-
          // 检查是否在24小时全额退款窗口内
         if (block.timestamp <= membership.startTime + FULL_REFUND_WINDOW) {
             // 全额退款逻辑
             membership.isActive = false;
+            lastRefundTime[msg.sender][id] = block.timestamp;
             payable(msg.sender).transfer(membership.totalAmount);
             emit RefundIssued(msg.sender, membership.totalAmount);
             return;
