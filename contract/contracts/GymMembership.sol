@@ -50,7 +50,8 @@ contract GymMembership is ReentrancyGuard, Ownable {
         address indexed user,
         address indexed coach,
         uint256 amount,
-        uint256 duration
+        uint256 duration,
+        bytes32 paymentProof
     );
 
     event FundsReleased(
@@ -68,7 +69,15 @@ contract GymMembership is ReentrancyGuard, Ownable {
     event DurationExtended(
         address indexed userAddress,
         uint256 id,
-        uint256 extendDuration
+        uint256 extendDuration,
+        bytes32 paymentProof
+    );
+
+    event MembershipTransferred(
+        address indexed from,
+        address indexed to,
+        uint256 originalId,
+        uint256 newId
     );
 
     function registerUser(
@@ -84,7 +93,10 @@ contract GymMembership is ReentrancyGuard, Ownable {
         emit UserRegistered(userAddress, _userType);
     }
 
-    function verifiedCoach(address coachAddress, string memory ipfsCertHash) external onlyOwner {
+    function verifiedCoach(
+        address coachAddress,
+        string memory ipfsCertHash
+    ) external onlyOwner {
         require(bytes(ipfsCertHash).length == 46, "Invalid IPFS hash");
         verifiedCoaches[coachAddress] = true;
         emit CoachIsVerified(coachAddress, ipfsCertHash);
@@ -96,24 +108,28 @@ contract GymMembership is ReentrancyGuard, Ownable {
         return memberships[userAddress].length;
     }
 
-    function getLastRefundTime(address userAddress, uint256 _id) public view returns (uint256) {
-        return  lastRefundTime[userAddress][_id];
+    function getLastRefundTime(
+        address userAddress,
+        uint256 _id
+    ) public view returns (uint256) {
+        return lastRefundTime[userAddress][_id];
     }
+
     // 用户购买会员
-    // frontend
     function purchaseMembership(
         address coach,
-        uint256 duration
-    ) external payable nonReentrant {
-        require(msg.value > 0, "Payment required");
-        require(duration > 0, "Invalid duration");
-        require(users[msg.sender].isActive == true, "No registration");
+        address user,
+        uint256 duration,
+        bytes32 paymentProof,
+        uint256 paymentAmount
+    ) external onlyOwner nonReentrant {
+        require(users[user].isActive == true, "No registration");
         if (coach != address(0)) {
             // 记录会员信息
-            memberships[msg.sender].push(
+            memberships[user].push(
                 Membership({
-                    id: getMembershipLength(msg.sender),
-                    totalAmount: msg.value,
+                    id: getMembershipLength(user),
+                    totalAmount: paymentAmount,
                     releasedAmount: 0,
                     startTime: block.timestamp,
                     lastReleaseTime: block.timestamp,
@@ -123,10 +139,10 @@ contract GymMembership is ReentrancyGuard, Ownable {
                 })
             );
         } else {
-            memberships[msg.sender].push(
+            memberships[user].push(
                 Membership({
-                    id: getMembershipLength(msg.sender),
-                    totalAmount: msg.value,
+                    id: getMembershipLength(user),
+                    totalAmount: paymentAmount,
                     releasedAmount: 0,
                     startTime: block.timestamp,
                     lastReleaseTime: block.timestamp,
@@ -136,24 +152,72 @@ contract GymMembership is ReentrancyGuard, Ownable {
                 })
             );
         }
-        lastRefundTime[msg.sender][getMembershipLength(msg.sender)-1] = block.timestamp;
-
-        emit MembershipPurchased(msg.sender, coach, msg.value, duration);
+        lastRefundTime[user][getMembershipLength(user) - 1] = block.timestamp;
+        emit MembershipPurchased(
+            user,
+            coach,
+            paymentAmount,
+            duration,
+            paymentProof
+        );
     }
 
     // 延长会员有效期
-    // frontend
     function extendMembership(
         uint256 id,
-        uint256 extraDuration
-    ) external payable nonReentrant {
-        Membership storage m = memberships[msg.sender][id];
+        address user,
+        uint256 extraDuration,
+        bytes32 paymentProof,
+        uint256 paymentAmount
+    ) external onlyOwner nonReentrant {
+        Membership storage m = memberships[user][id];
         require(m.isActive, "No active membership");
 
-        m.totalAmount += msg.value;
+        m.totalAmount += paymentAmount;
         m.duration += extraDuration;
 
-        emit DurationExtended(msg.sender, id, extraDuration);
+        emit DurationExtended(user, id, extraDuration, paymentProof);
+    }
+
+    // 转让会员
+    function transferMembership(
+        uint256 id,
+        address newOwner
+    ) external nonReentrant {
+        require(users[msg.sender].isActive, "Sender inactive");
+        require(users[newOwner].isActive, "Recipient inactive");
+        require(msg.sender != newOwner, "Cannot transfer to self");
+
+        Membership[] storage senderMemberships = memberships[msg.sender];
+        require(id < senderMemberships.length, "Invalid membership ID");
+        Membership memory transfering = senderMemberships[id];
+        require(transfering.isActive, "Membership not active");
+
+        // 创建新会员记录
+        memberships[newOwner].push(
+            Membership({
+                id: memberships[newOwner].length,
+                totalAmount: transfering.totalAmount -
+                    transfering.releasedAmount,
+                releasedAmount: 0,
+                startTime: block.timestamp, // 重置开始时间
+                duration: transfering.duration -
+                    (block.timestamp - transfering.startTime),
+                privatecoach: transfering.privatecoach,
+                lastReleaseTime: block.timestamp,
+                isActive: true
+            })
+        );
+
+        // 使原会员失效
+        senderMemberships[id].isActive = false;
+
+        emit MembershipTransferred(
+            msg.sender,
+            newOwner,
+            id,
+            memberships[newOwner].length - 1
+        );
     }
 
     // 获取教练可提取收益
@@ -186,16 +250,13 @@ contract GymMembership is ReentrancyGuard, Ownable {
 
     // 按服务进度释放资金
     // owner or coach
-    function releaseFunds(
-        address user,
-        uint256 id
-    ) external nonReentrant {
+    function releaseFunds(address user, uint256 id) external nonReentrant {
         Membership storage membership = memberships[user][id];
         // bool isAuthed = msg.sender == owner() || msg.sender == membership.privatecoach;
         // require(isAuthed, "Not authorized");
         // require(
-        //     block.timestamp > lastWithdrawTime[msg.sender] + 1 days,
-        //     "24h cooldown"
+        //     block.timestamp > lastWithdrawTime[msg.sender] + 3 days,
+        //     "3d cooldown"
         // );
         require(membership.isActive, "Membership not active");
         (
@@ -225,16 +286,6 @@ contract GymMembership is ReentrancyGuard, Ownable {
     function requestRefund(uint256 id) external nonReentrant {
         Membership storage membership = memberships[msg.sender][id];
         require(membership.isActive, "Membership not active");
-         // 检查是否在24小时全额退款窗口内
-        if (block.timestamp <= membership.startTime + FULL_REFUND_WINDOW) {
-            // 全额退款逻辑
-            membership.isActive = false;
-            lastRefundTime[msg.sender][id] = block.timestamp;
-            payable(msg.sender).transfer(membership.totalAmount);
-            emit RefundIssued(msg.sender, membership.totalAmount);
-            return;
-        }
-
         // 检查退款冷却时间
         require(
             block.timestamp - lastRefundTime[msg.sender][id] >= REFUND_COOLDOWN,
@@ -244,10 +295,16 @@ contract GymMembership is ReentrancyGuard, Ownable {
         // 更新最后退款时间
         lastRefundTime[msg.sender][id] = block.timestamp;
 
-        (uint256 releasable, uint256 platformCut, uint256 coachCut) = getReleaseFunds(msg.sender, id);
+        (
+            uint256 releasable,
+            uint256 platformCut,
+            uint256 coachCut
+        ) = getReleaseFunds(msg.sender, id);
         // 计算剩余金额
-        uint256 remainingAmount = membership.totalAmount - membership.releasedAmount - releasable;
-        
+        uint256 remainingAmount = membership.totalAmount -
+            membership.releasedAmount -
+            releasable;
+
         // 重置会员状态
         membership.isActive = false;
 
@@ -283,5 +340,38 @@ contract GymMembership is ReentrancyGuard, Ownable {
     {
         Profile memory m = users[user];
         return (m.userType, m.registrationDate, m.isActive);
+    }
+
+    function deactivateUser() external {
+        require(users[msg.sender].isActive == true, "No registration");
+        // 检查是否还有课程未退款
+        for (
+            uint256 i = memberships[msg.sender].length - 1;
+            i > memberships[msg.sender].length;
+            i++
+        ) {
+            require(
+                memberships[msg.sender][i].isActive == false,
+                "Membership not active"
+            );
+        }
+        users[msg.sender].isActive = false;
+    }
+
+    function adminForceRefund(
+        address user,
+        uint256 id
+    ) external onlyOwner nonReentrant {
+        Membership storage membership = memberships[user][id];
+        require(membership.isActive, "Already inactive");
+
+        uint256 remainingAmount = membership.totalAmount -
+            membership.releasedAmount;
+        membership.isActive = false;
+
+        if (remainingAmount > 0) {
+            payable(user).transfer(remainingAmount);
+        }
+        emit RefundIssued(user, remainingAmount);
     }
 }
