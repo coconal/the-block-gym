@@ -45,6 +45,7 @@ contract GymMembership is ReentrancyGuard, Ownable {
     uint256 public constant REFUND_COOLDOWN = 7 days;
     // 全退款时间限制
     uint256 public constant FULL_REFUND_WINDOW = 1 days;
+
     // 事件
     event MembershipPurchased(
         address indexed user,
@@ -193,12 +194,25 @@ contract GymMembership is ReentrancyGuard, Ownable {
         Membership memory transfering = senderMemberships[id];
         require(transfering.isActive, "Membership not active");
 
+        (
+            uint256 releasable,
+            uint256 platformCut,
+            uint256 coachCut
+        ) = getReleaseFunds(msg.sender, id);
+
+        // 更新状态
+        senderMemberships[id].releasedAmount += releasable;
+
+        payable(owner()).transfer(platformCut);
+        payable(senderMemberships[id].privatecoach).transfer(coachCut);
+
         // 创建新会员记录
         memberships[newOwner].push(
             Membership({
-                id: memberships[newOwner].length,
+                id: getMembershipLength(newOwner),
                 totalAmount: transfering.totalAmount -
-                    transfering.releasedAmount,
+                    transfering.releasedAmount -
+                    releasable,
                 releasedAmount: 0,
                 startTime: block.timestamp, // 重置开始时间
                 duration: transfering.duration -
@@ -249,13 +263,10 @@ contract GymMembership is ReentrancyGuard, Ownable {
     }
 
     // 按服务进度释放资金
-    // owner or coach
-    function releaseFunds(address user, uint256 id) external nonReentrant {
+    function releaseFunds(address user, uint256 id) public nonReentrant {
         Membership storage membership = memberships[user][id];
-        // bool isAuthed = msg.sender == owner() || msg.sender == membership.privatecoach;
-        // require(isAuthed, "Not authorized");
         // require(
-        //     block.timestamp > lastWithdrawTime[msg.sender] + 3 days,
+        //     block.timestamp > membership.lastReleaseTime + 3 days,
         //     "3d cooldown"
         // );
         require(membership.isActive, "Membership not active");
@@ -287,14 +298,13 @@ contract GymMembership is ReentrancyGuard, Ownable {
         Membership storage membership = memberships[msg.sender][id];
         require(membership.isActive, "Membership not active");
         // 检查退款冷却时间
-        require(
-            block.timestamp - lastRefundTime[msg.sender][id] >= REFUND_COOLDOWN,
-            "Refund cooldown"
-        );
+        // require(
+        //     block.timestamp - lastRefundTime[msg.sender][id] >= REFUND_COOLDOWN,
+        //     "Refund cooldown"
+        // );
 
         // 更新最后退款时间
         lastRefundTime[msg.sender][id] = block.timestamp;
-
         (
             uint256 releasable,
             uint256 platformCut,
@@ -304,7 +314,6 @@ contract GymMembership is ReentrancyGuard, Ownable {
         uint256 remainingAmount = membership.totalAmount -
             membership.releasedAmount -
             releasable;
-
         // 重置会员状态
         membership.isActive = false;
 
@@ -374,4 +383,17 @@ contract GymMembership is ReentrancyGuard, Ownable {
         }
         emit RefundIssued(user, remainingAmount);
     }
+
+    // 接收 ETH 的方法
+    receive() external payable {
+        emit EtherReceived(msg.sender, msg.value);
+    }
+
+    // 当调用不存在的函数时接收 ETH
+    fallback() external payable {
+        emit EtherReceived(msg.sender, msg.value);
+    }
+
+    // 定义一个事件来记录 ETH 接收信息
+    event EtherReceived(address indexed sender, uint256 amount);
 }
