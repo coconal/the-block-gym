@@ -26,7 +26,8 @@ contract GymMembership is ReentrancyGuard, Ownable {
 
     enum UserType {
         Member,
-        Coach
+        Coach,
+        Admin
     }
 
     // 用户地址 => 会员信息

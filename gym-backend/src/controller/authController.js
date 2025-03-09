@@ -6,7 +6,8 @@ import { recoverMessageAddress } from "viem"
 export const onlyOwner = async (req, res, next) => {
 	try {
 		const { address } = req.user
-		if (address !== process.env.OWNER_ADDRESS) {
+
+		if (address.toLocaleLowerCase() !== process.env.OWNER_ADDRESS.toLocaleLowerCase()) {
 			return res.status(403).json({ error: "FORBIDDEN" })
 		}
 		next()
@@ -57,13 +58,16 @@ export const signup = async (req, res) => {
 				error: "User already registered on blockchain",
 			})
 		}
+		console.error("Signup error:", error)
 		res.status(500).json({ error: "Internal server error" })
 	}
 }
 
 export const login = async (req, res) => {
 	const { signature, address } = req.body
-	// const { address } = req.body
+	if (!signature || !address) {
+		res.status(400).json({ error: "Invalid request" })
+	}
 
 	try {
 		const user = await User.findOne({ address })
@@ -71,6 +75,7 @@ export const login = async (req, res) => {
 			return res.status(401).json({ error: "User not found" })
 		}
 		const nonce = user.nonce
+
 		//TODO get nonce from signature
 
 		const message = `login message&nunce:${nonce}`
@@ -80,7 +85,6 @@ export const login = async (req, res) => {
 			message,
 			signature,
 		})
-		console.log(recoveredAddress)
 
 		if (recoveredAddress.toLowerCase() !== address.toLowerCase()) {
 			return res.status(401).json({ error: "Invalid signature" })

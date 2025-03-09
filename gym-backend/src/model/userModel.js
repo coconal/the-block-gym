@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
 	},
 	role: {
 		type: String,
-		enum: ["user", "coach"],
+		enum: ["user", "coach", "admin"],
 		required: true,
 	},
 	// registrationDate:{

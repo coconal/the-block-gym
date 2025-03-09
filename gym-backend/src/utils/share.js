@@ -23,4 +23,4 @@ const contract = getContract({
 	client: { public: publicClient, wallet: walletClient },
 })
 
-export { contract, JWT_SECRET, JSONbig }
+export { publicClient, contract, JWT_SECRET, JSONbig }

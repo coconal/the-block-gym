@@ -1,5 +1,5 @@
 import User from "../model/userModel.js"
-import { contract } from "../utils/share.js"
+import { contract, publicClient } from "../utils/share.js"
 import { JSONbig } from "../utils/share.js"
 
 export const getNonce = async (req, res) => {
@@ -98,4 +98,45 @@ export const getUserAllMembership = async (req, res) => {
 			data: memberships,
 		})
 	} catch (error) {}
+}
+
+export const purchaseMembership = async (req, res) => {
+	const { coachAddress, duration, paymentProof } = req.body
+	const useraddress = req.user.address
+	try {
+		const transaction = await publicClient.getTransaction({
+			hash: paymentProof,
+		})
+		console.log(transaction, contract.address)
+		// 验证1：交易接收地址必须是合约地址
+		if (transaction.to.toLowerCase() !== contract.address.toLowerCase()) {
+			return res.status(400).json({ error: "Invalid payment receiver" })
+		}
+
+		// 验证2：交易金额匹配会员价格（假设从合约获取价格）
+		// TODO
+
+		// 验证3：付款人地址必须与当前用户匹配
+		if (transaction.from.toLowerCase() !== useraddress.toLowerCase()) {
+			return res.status(400).json({ error: "Payment sender mismatch" })
+		}
+
+		// 验证4：确认交易已经上链
+		if (!transaction.blockNumber) {
+			return res.status(400).json({ error: "Payment not confirmed" })
+		}
+		const result = await contract.write.purchaseMembership([
+			coachAddress,
+			useraddress,
+			duration,
+			paymentProof,
+			transaction.value,
+		])
+		console.log(result)
+		res.status(200).json({
+			data: "ok",
+		})
+	} catch (error) {
+		console.log(error)
+	}
 }

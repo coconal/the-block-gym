@@ -6,6 +6,7 @@ import dotenv from "dotenv"
 import authRouter from "./routes/authRoute.js"
 import userRouter from "./routes/userRoute.js"
 import coachRouter from "./routes/coachRoute.js"
+import adminRouter from "./routes/adminRoute.js"
 dotenv.config()
 
 const app = express()
@@ -19,6 +20,7 @@ app.use(morgan("dev"))
 // 登录接口
 app.use("/api/user", authRouter, userRouter)
 app.use("/api/coach", coachRouter)
+app.use("/api/admin", adminRouter)
 
 mongoose.connect(DB).then(() => {
 	// console.log(con.connections);
