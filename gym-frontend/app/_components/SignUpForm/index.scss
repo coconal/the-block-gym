@@ -1,0 +1,19 @@
+.custom-signup-form {
+	width: 50%;
+	padding: 40px 40px 20px 0px !important;
+
+	.ant-form-item-required {
+		font-size: 1rem;
+		color: #1a1b1b !important; // 标签文字颜色
+		font-weight: 500;
+	}
+	.ant-checkbox-label {
+		font-size: 1rem;
+		color: #1a1b1b !important; // 标签文字颜色
+		font-weight: 500;
+	}
+}
+
+.error-message {
+	color: #e37037cf;
+}

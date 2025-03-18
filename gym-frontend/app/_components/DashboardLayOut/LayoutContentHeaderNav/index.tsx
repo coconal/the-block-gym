@@ -1,11 +1,10 @@
 "use client"
 import "./index.scss"
 
-import { useState } from "react"
 import type { MenuProps } from "antd"
 import { Menu } from "antd"
 import { menuItems } from "./menuItem"
-import { useParams, usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 interface ILayoutContentHeaderNavProps {
 	type: number

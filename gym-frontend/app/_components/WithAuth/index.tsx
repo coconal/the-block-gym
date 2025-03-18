@@ -11,6 +11,7 @@ export function withAuth<P extends object>(Component: React.ComponentType<P>) {
 
 		useEffect(() => {
 			const token = localStorage.getItem("web3_token")
+
 			// 等待自动连接状态确认
 			if (status === "reconnecting" || status === "connecting") return
 

@@ -1,108 +1,102 @@
 "use client"
 
+import "./index.scss"
+
 import { useMutation } from "@tanstack/react-query"
-import { useRouter } from "next/router"
-import React from "react"
 import { useAccount } from "wagmi"
-import type { FormProps } from "antd"
-import { Button, Checkbox, Flex, Form, Input, Radio } from "antd"
-import { TextField } from "@mui/material"
+import { Button, Checkbox, Form, Input, Select } from "antd"
+import toast from "react-hot-toast"
+
+const { Option } = Select
 
 interface SignUpFormType {
-	usertype: number
-	name: string
+	username: string
+	role: string
 	address: string
-}
-
-type FieldType = {
-	usertype?: number
-	username?: string
-	address?: string
-	remember?: string
 }
 
 export default function SignupForm() {
 	const { address, isConnected } = useAccount()
-
-	const loginMutation = useMutation({
-		mutationFn: async ({ usertype, name, address }: SignUpFormType) => {
-			const res = await fetch("/api/register", {
+	const [form] = Form.useForm()
+	const registerMutation = useMutation({
+		mutationFn: async ({ role, username, address }: SignUpFormType) => {
+			const res = await fetch("http://localhost:3002/api/user/signup", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ usertype, name, address }),
+				body: JSON.stringify({ role, username, address }),
 			})
+
+			if (!res.ok) {
+				const errorText = await res.json()
+				throw new Error(`signup failed: ${errorText.error}`)
+			}
 			return res.json()
 		},
-		onSuccess: (data) => {
-			if (data.datahash) {
-			}
+		onSuccess: () => {
+			toast.success("sign up successfully, you can login now!", { duration: 5000 })
+			form.resetFields()
 		},
 		onError: (error) => {
-			console.error("登录失败:", error)
-			alert("登录失败，请重试")
+			toast.error(error.message)
 		},
 	})
-	const handleLogin = async (formdata: FormData) => {
-		if (!isConnected) return alert("请先连接钱包")
-		console.log(formdata)
 
-		// 提交登录请求
-		// loginMutation.mutate({ ...formdata })
+	const onFinish = (values: SignUpFormType) => {
+		const formData = { ...values, address: address as string }
+		// 调用 mutation 进行数据提交
+		registerMutation.mutate(formData)
 	}
-	//: FormProps<FieldType>['onFinish']
-	function onFinish() {}
-	//: FormProps<FieldType>['onFinishFailed']
-	function onFinishFailed() {}
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				justifyContent: "center",
-				alignItems: "center",
-				height: "60vh",
-				flexDirection: "column",
-			}}
+		<Form
+			form={form}
+			name="basic"
+			labelCol={{ span: 8 }}
+			wrapperCol={{ span: 16 }}
+			style={{ width: "100%" }}
+			autoComplete="off"
+			className="custom-signup-form"
+			onFinish={onFinish}
 		>
-			<Flex
-				vertical
-				gap={20}
-				style={{
-					width: "300px",
-				}}
+			<Form.Item<SignUpFormType>
+				label="Username"
+				name="username"
+				rules={[
+					{
+						required: true,
+						message: <span className="error-message">Please input your username!</span>,
+					},
+				]}
 			>
-				<TextField
-					id="filled-basic"
-					label="Name"
-					variant="filled"
-					required
-					sx={{
-						backgroundColor: "#2a2d3e", // 深蓝灰色背景
-						borderRadius: "8px",
-						"& .MuiInputBase-input": {
-							color: "#e4e6ef", // 浅灰白色文字
-						},
-						"& .MuiInputLabel-root": {
-							color: "#8b8fa3", // 中灰色标签
-						},
-						"& .MuiInputLabel-root.Mui-focused": {
-							color: "#7367f0", // 紫色聚焦标签
-						},
-						"& .MuiFilledInput-underline:after": {
-							borderBottomColor: "#7367f0", // 紫色下划线
-						},
-						"& .MuiFilledInput-root": {
-							backgroundColor: "#2a2d3e",
-							"&:hover": {
-								backgroundColor: "#323548", // 悬停时稍微亮一点
-							},
-							"&.Mui-focused": {
-								backgroundColor: "#323548",
-							},
-						},
-					}}
-				/>
-			</Flex>
-		</div>
+				<Input className="custom-input" style={{ color: "#2d3436", borderColor: "#636e72" }} />
+			</Form.Item>
+
+			<Form.Item<SignUpFormType>
+				label="Usertype"
+				name="role"
+				rules={[
+					{
+						required: true,
+						message: <span className="error-message">Please select your usertype!</span>,
+					},
+				]}
+			>
+				<Select style={{ color: "#2d3436" }} placeholder="Select  your role" allowClear>
+					<Option value="user">user</Option>
+					<Option value="coach">coach</Option>
+				</Select>
+			</Form.Item>
+
+			<Form.Item label={null}>
+				<Button
+					type="primary"
+					htmlType="submit"
+					disabled={!isConnected}
+					loading={registerMutation.isPending}
+				>
+					{isConnected ? "Submit" : "Please Connect Wallet"}
+				</Button>
+			</Form.Item>
+		</Form>
 	)
 }
