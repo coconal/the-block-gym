@@ -94,7 +94,6 @@ const AMapComponent = () => {
 							mapInstanceRef.current?.setCenter(data.position)
 							mapInstanceRef.current.setCenter(data.position) // 移动到中心
 						}
-						marker.setIcon()
 					})
 					markersRef.current.push(marker)
 					return marker
