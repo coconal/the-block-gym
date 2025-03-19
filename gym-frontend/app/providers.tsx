@@ -13,10 +13,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
 		<WagmiProvider config={config}>
 			<QueryClientProvider client={queryClient}>
 				<RainbowKitProvider>
-					<>
+					<div>
 						<Toaster />
 						{children}
-					</>
+					</div>
 				</RainbowKitProvider>
 			</QueryClientProvider>
 		</WagmiProvider>

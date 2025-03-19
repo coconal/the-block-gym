@@ -1,4 +1,10 @@
+import AmapComponent from "../_components/Amap"
+
 export default function page() {
 	//TODO
-	return <div>google map here</div>
+	return (
+		<div>
+			<AmapComponent />
+		</div>
+	)
 }
