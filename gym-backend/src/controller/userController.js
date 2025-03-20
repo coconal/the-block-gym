@@ -58,7 +58,7 @@ export const getMembership = async (req, res) => {
 			data,
 		})
 	} catch (error) {
-		console.error("Get Membership error:", error)
+		console.error("Get Membership error:", error.message)
 		res.status(500).json({ error: "Internal server error" })
 	}
 }

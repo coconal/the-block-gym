@@ -12,6 +12,11 @@ const userSchema = new mongoose.Schema({
 			message: (props) => `${props.value} is not a valid Ethereum address!`,
 		},
 	},
+	username: {
+		type: String,
+		length: 20,
+		required: true,
+	},
 	nonce: {
 		type: Number,
 		required: true,

@@ -6,7 +6,7 @@ import rateLimit from "express-rate-limit"
 // 每个 IP 每天最多注册 2 个账户
 const registerLimiter = rateLimit({
 	windowMs: 24 * 60 * 60 * 1000,
-	max: 2,
+	max: 20,
 	message: "该 IP 今日注册次数已达上限",
 })
 

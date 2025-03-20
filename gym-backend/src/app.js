@@ -3,6 +3,7 @@ import cors from "cors"
 import morgan from "morgan"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
+import cookieParser from "cookie-parser"
 import authRouter from "./routes/authRoute.js"
 import userRouter from "./routes/userRoute.js"
 import coachRouter from "./routes/coachRoute.js"
@@ -12,8 +13,12 @@ dotenv.config()
 const app = express()
 
 const DB = process.env.DATABASE_URL.replace("<db_password>", process.env.DATABASE_PASSWORD)
-
-app.use(cors())
+const corsOptions = {
+	origin: "http://localhost:3000",
+	credentials: true,
+}
+app.use(cookieParser())
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(morgan("dev"))
 
@@ -26,7 +31,7 @@ mongoose.connect(DB).then(() => {
 	// console.log(con.connections);
 	console.log("DB connection successful!")
 })
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3002
 app.listen(PORT, () => {
 	console.log(`Server running on http://localhost:${PORT}`)
 })

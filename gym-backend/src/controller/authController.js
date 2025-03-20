@@ -19,10 +19,9 @@ export const onlyOwner = async (req, res, next) => {
 
 export const protect = async (req, res, next) => {
 	try {
-		let token
-		// const token2 = req.headers.cookie.split("=")[1]
-		if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
-			token = req.headers.authorization.split(" ")[1]
+		let token = req.cookies.jwt
+		if (!token) {
+			return res.status(401).json({ error: "Unauthorized" })
 		}
 		const { address, id } = jwt.decode(token, process.env.JWT_SECRET)
 
@@ -39,8 +38,11 @@ export const protect = async (req, res, next) => {
 }
 
 export const signup = async (req, res) => {
-	const { address, role } = req.body
+	const { address, username, role } = req.body
 	const usertype = role === "user" ? 0 : 1
+	if (!address || !username || !role) {
+		res.status(400).json({ error: "Invalid request" })
+	}
 	try {
 		const existingUser = await User.findOne({ address })
 		if (existingUser) {
@@ -100,10 +102,10 @@ export const login = async (req, res) => {
 		res.cookie("jwt", token, {
 			httpOnly: true,
 			maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+			sameSite: "Strict", // 防止 CSRF
 			// secure: true,
 		})
-
-		res.status(200).json({ message: "Login successful", nonce, token })
+		res.status(200).json({ message: "Login successful", nonce })
 	} catch (error) {
 		console.error("Login error:", error)
 		res.status(500).json({ error: "Internal server error" })
