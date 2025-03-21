@@ -17,13 +17,13 @@ const locationInitial: MarkerData[] = [
 	{
 		position: [103.985172, 30.579237], // 标记位置：经度,纬度
 		title: "GYM 1", // 鼠标悬浮显示的文字
-		desription: "GYM 2-四川省成都市双流区学府路一段-成都信息工程大学一食堂",
+		desription: "GYM 1-四川省成都市双流区学府路一段-成都信息工程大学一食堂",
 		image: "https://www.cuit.edu.cn/__local/6/C8/7F/0AEC37DBFE925C42079A77E38E7_2F0DC092_17C63.jpg",
 	},
 	{
 		position: [103.98852, 30.581832], // 标记位置：经度,纬度
 		title: "GYM 2", // 鼠标悬浮显示的文字
-		desription: "GYM 1-四川省成都市双流区学府路一段-成都信息工程大学",
+		desription: "GYM 2-四川省成都市双流区学府路一段-成都信息工程大学",
 		image: "https://www.cuit.edu.cn/__local/E/A2/25/FFA0B74226AA143100F9F992DC0_53164C70_FEB04.jpg",
 	},
 	{

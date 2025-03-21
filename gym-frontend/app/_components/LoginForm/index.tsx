@@ -8,6 +8,7 @@ import { useAccount, useSignMessage } from "wagmi"
 import LoginIcon from "@mui/icons-material/Login"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
+import axiosInstance from "@/app/_utils/request"
 
 interface SnackbarState extends SnackbarOrigin {
 	open: boolean
@@ -36,23 +37,14 @@ export default function LoginForm() {
 
 	const loginMutation = useMutation({
 		mutationFn: async () => {
-			// 添加请求超时处理
-			const controller = new AbortController()
-			const timeoutId = setTimeout(() => controller.abort(), 10000)
-
 			try {
-				// 1. 添加响应状态检查
-				const nonceRes = await fetch(`http://localhost:3002/api/user/nonce/${address}`, {
-					method: "GET",
-					headers: { "Content-Type": "application/json" },
-					signal: controller.signal,
-				})
+				const nonceRes = await axiosInstance.get(`/user/nonce/${address}`, {})
 
-				if (!nonceRes.ok) {
+				if (!(nonceRes.statusText === "OK")) {
 					throw new Error(`获取 nonce 失败：${nonceRes.status}`)
 				}
 
-				const { nonce } = await nonceRes.json()
+				const { nonce } = nonceRes.data
 
 				// 2. 添加签名错误处理
 
@@ -74,19 +66,15 @@ export default function LoginForm() {
 						(_, reject) =>
 							setTimeout(() => {
 								reject(new Error("签名操作超时，请重试"))
-							}, 30000) // 设置超时时间为 30 秒
+							}, 10000) // 设置超时时间为 10 秒
 					),
 				])
 				// console.log(signature)
-
-				// 3. 添加登录响应检查
-				const loginRes = await fetch(`http://localhost:3002/api/user/login`, {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ address, signature }),
-					signal: controller.signal,
+				const loginRes = await axiosInstance.post("user/login", {
+					address,
+					signature,
 				})
-				if (!loginRes.ok) {
+				if (!(loginRes.statusText === "OK")) {
 					throw new Error(`登录失败：${loginRes.status}`)
 				}
 				if (loginRes.status === 401) {
@@ -99,9 +87,12 @@ export default function LoginForm() {
 					// 登录成功，移动到 dashboard 页面
 					router.replace("/dashboard")
 				}
-				return loginRes.json()
-			} finally {
-				clearTimeout(timeoutId)
+				return loginRes.data
+			} catch (err) {
+				if (err instanceof Error) {
+					console.error("[3/3] 登录错误:", err.message)
+					setError({ ...error, open: true, message: err.message })
+				}
 			}
 		},
 		onSuccess: (data) => {

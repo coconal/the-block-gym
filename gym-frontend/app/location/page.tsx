@@ -1,6 +1,6 @@
 import AmapComponent from "../_components/Amap"
 
-export default function page() {
+export default function LocationPage() {
 	//TODO
 	return (
 		<div>

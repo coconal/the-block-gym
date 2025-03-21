@@ -10,15 +10,14 @@ export function withAuth<P extends object>(Component: React.ComponentType<P>) {
 		const { status } = useAccount()
 
 		useEffect(() => {
-			const token = localStorage.getItem("web3_token")
+			// TODO
+			// cookie 过期
 
-			// 等待自动连接状态确认
-			if (status === "reconnecting" || status === "connecting") return
-
-			if (!token) {
-				router.push("/login")
+			// // 仅当上一次状态是已连接，当前状态变为断开时执行跳转
+			if (status === "disconnected") {
+				router.push("/auth")
 			}
-		}, [router, status])
+		}, [status, router])
 
 		return <Component {...props} />
 	}

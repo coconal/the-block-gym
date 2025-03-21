@@ -5,9 +5,11 @@ import SignupForm from "../SignUpForm"
 import LoginForm from "../LoginForm/index"
 import { Segmented } from "antd"
 import { useState } from "react"
+import { useAccount } from "wagmi"
 
 export default function AuthPage() {
 	const [alignValue, setAlignValue] = useState<Align>("Login")
+	const { status } = useAccount()
 	type Align = "Login" | "Signup"
 	return (
 		<div
@@ -25,6 +27,7 @@ export default function AuthPage() {
 						style={{ marginBottom: 8 }}
 						onChange={setAlignValue}
 						options={["Login", "Signup"]}
+						disabled={status === "disconnected"}
 					/>
 				</div>
 				<div className="main-content">
@@ -34,6 +37,7 @@ export default function AuthPage() {
 					<div className={`form-opa ${alignValue === "Signup" && "active"}`}>
 						<SignupForm />
 					</div>
+					{status === "disconnected" && <div>🙁 Please Connect Wallet</div>}
 				</div>
 			</div>
 		</div>

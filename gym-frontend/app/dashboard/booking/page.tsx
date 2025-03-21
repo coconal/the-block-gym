@@ -1,44 +1,28 @@
 "use client"
-
-import Spinner from "@/app/_components/Loading/Spinner"
+import BookingListItem from "@/app/_components/BookingListItem"
+import { getAllCourses } from "@/app/_requestAPI/API/courses"
 import { useQuery } from "@tanstack/react-query"
-import { useParams } from "next/navigation"
+import { List } from "antd"
 
-// async function getBookingData(): Promise<IBookingData> {
-// 	const res = await fetch("https://fakestoreapi.com/products/1")
-// 	return res.json()
-// }
-
-// interface IBookingData {
-// 	id: number
-// 	title: string
-// 	price: number
-// 	description: string
-// 	category: string
-// 	image: string
-// 	rating: {
-// 		rate: number
-// 		count: number
-// 	}
-// }
-
-export default function BookingPage() {
-	// const { data, isPending, error, isError } = useQuery({
-	// 	queryKey: ["bookingData"],
-	// 	queryFn: getBookingData,
-	// })
-
-	// if (isPending) {
-	// 	return <Spinner />
-	// }
-	// if (isError) {
-	// 	return <div>Error: {error.message}</div>
-	// }
+export default function AsyncBookingPage() {
+	const { data, isPending } = useQuery({
+		queryKey: ["courses"],
+		queryFn: getAllCourses,
+	})
+	if (isPending) {
+		return <h1>Loading...</h1>
+	}
+	const courseList = data?.courses || []
 
 	return (
 		<div>
-			<h1>Booking Page</h1>
-			<div></div>
+			<List
+				itemLayout="vertical"
+				size="small"
+				pagination={{ position: "top", align: "end", pageSize: 3 }}
+				dataSource={courseList}
+				renderItem={(item, index) => <BookingListItem item={item} index={index} />}
+			/>
 		</div>
 	)
 }

@@ -2,7 +2,7 @@ import { getDefaultConfig } from "@rainbow-me/rainbowkit"
 import { arbitrum, base, mainnet, optimism, polygon, sepolia, hardhat } from "wagmi/chains"
 
 export const config = getDefaultConfig({
-	appName: "RainbowKit demo",
+	appName: "GYM-APP",
 	projectId: "YOUR_PROJECT_ID",
 	chains: [
 		mainnet,
@@ -13,5 +13,5 @@ export const config = getDefaultConfig({
 		base,
 		// ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [sepolia] : []),
 	],
-	ssr: true,
+	// ssr: true,
 })
