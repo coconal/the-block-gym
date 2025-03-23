@@ -1,4 +1,4 @@
-import Membership from "../model/membershipModel.js"
+import CourseSchema from "../model/coursesModel.js"
 
 export const setPlatformFee = async (req, res) => {
 	const { fee } = req.body
@@ -13,11 +13,11 @@ export const setPlatformFee = async (req, res) => {
 	}
 }
 
-export const createMembership = async (req, res) => {
-	const { membershipType, description, price, caoachAddress, duration, discount } = req.body
+export const createCourse = async (req, res) => {
+	const { coursetype, description, price, caoachAddress, duration, discount } = req.body
 	try {
-		const result = await Membership.create({
-			membershipType,
+		const result = await CourseSchema.create({
+			coursetype,
 			description,
 			price,
 			caoachAddress,
@@ -27,7 +27,7 @@ export const createMembership = async (req, res) => {
 		if (result) {
 			res.status(200).json({
 				data: "ok",
-				message: "Membership created successfully",
+				message: "CourseSchemacreated successfully",
 			})
 		} else {
 			res.status(400).json({
@@ -36,17 +36,17 @@ export const createMembership = async (req, res) => {
 			})
 		}
 	} catch (error) {
-		console.error("Create membership error:", error)
+		console.error("Create CourseSchemaerror:", error)
 		res.status(500).json({ error: "Internal server error" })
 	}
 }
 
-export const updateMembership = async (req, res) => {
+export const updateCourse = async (req, res) => {
 	const { _coursemembershipId } = req.params
-	const { membershipType, description, price, caoachAddress, duration, discount } = req.body
+	const { coursetype, description, price, caoachAddress, duration, discount } = req.body
 	const updateData = Object.fromEntries(
 		Object.entries({
-			membershipType,
+			coursetype,
 			description,
 			price,
 			caoachAddress,
@@ -57,20 +57,20 @@ export const updateMembership = async (req, res) => {
 	console.log(_coursemembershipId, updateData)
 
 	try {
-		const result = await Membership.findByIdAndUpdate(_coursemembershipId, updateData)
+		const result = await CourseSchema.findByIdAndUpdate(_coursemembershipId, updateData)
 		if (result) {
 			res.status(200).json({
 				data: "ok",
-				message: "Membership updated successfully",
+				message: "Course updated successfully",
 			})
 		} else {
 			res.status(400).json({
 				data: "error",
-				message: "Failed to update membership",
+				message: "Failed to update course",
 			})
 		}
 	} catch (error) {
-		console.error("Update membership error:", error)
+		console.error("Update course error:", error)
 		res.status(500).json({ error: "Internal server error" })
 	}
 }

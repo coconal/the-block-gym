@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 
-const membershipSchema = new mongoose.Schema({
-	membershipType: {
+const courseSchema = new mongoose.Schema({
+	coursetype: {
 		type: String,
 		required: true,
 		enum: ["BASIC", "VIP", "Boxing", "Yoga", "Zumba", "SHAPING", "FAT_BURNING", "Swimming"],
@@ -40,5 +40,5 @@ const membershipSchema = new mongoose.Schema({
 	},
 })
 
-const Membership = mongoose.model("Membership", membershipSchema)
-export default Membership
+const Courses = mongoose.model("courses", courseSchema)
+export default Courses

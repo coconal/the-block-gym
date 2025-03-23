@@ -8,6 +8,7 @@ import authRouter from "./routes/authRoute.js"
 import userRouter from "./routes/userRoute.js"
 import coachRouter from "./routes/coachRoute.js"
 import adminRouter from "./routes/adminRoute.js"
+import coursesRouter from "./routes/courseRoute.js"
 dotenv.config()
 
 const app = express()
@@ -26,6 +27,7 @@ app.use(morgan("dev"))
 app.use("/api/user", authRouter, userRouter)
 app.use("/api/coach", coachRouter)
 app.use("/api/admin", adminRouter)
+app.use("/api/courses", coursesRouter)
 
 mongoose.connect(DB).then(() => {
 	// console.log(con.connections);
