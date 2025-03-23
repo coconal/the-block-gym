@@ -5,9 +5,8 @@ import "./index.scss"
 import { Button, Layout, theme } from "antd"
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons"
 import LayoutSider from "./LayoutSider"
-import { Suspense, useState } from "react"
-
-import LayoutContentHeaderNav from "./LayoutContentHeaderNav"
+import { useState } from "react"
+import LayoutContentHeader from "./LayoutContentHeader"
 
 const { Header, Content, Sider } = Layout
 
@@ -16,7 +15,6 @@ interface IDashboardLayOut {
 }
 
 export default function DashboardLayOut({ children }: IDashboardLayOut) {
-	const [selectedIndex, setSelectedIndex] = useState(0)
 	const [collapsed, setCollapsed] = useState(false)
 
 	const {
@@ -24,7 +22,12 @@ export default function DashboardLayOut({ children }: IDashboardLayOut) {
 	} = theme.useToken()
 
 	return (
-		<div>
+		<div
+			style={{
+				height: "100%",
+				width: "100%",
+			}}
+		>
 			<Layout style={{ background: "transparent" }} className="dashboard-layout">
 				<Sider
 					className="layout-sider"
@@ -60,7 +63,8 @@ export default function DashboardLayOut({ children }: IDashboardLayOut) {
 										color: colorBgContainer,
 									}}
 								/>
-								<LayoutContentHeaderNav type={selectedIndex} />
+								<LayoutContentHeader />
+								{/* <LayoutContentHeaderNav type={selectedIndex} /> */}
 							</div>
 						</div>
 					</Header>
@@ -73,6 +77,11 @@ export default function DashboardLayOut({ children }: IDashboardLayOut) {
 							color: colorBgContainer,
 							border: "1px solid #3e3e3e",
 							boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+							overflow: "scroll",
+							overflowY: "auto",
+							overflowX: "hidden",
+							scrollbarWidth: "thin",
+							height: "calc(100vh - 180px)",
 						}}
 						className="layout-content"
 					>

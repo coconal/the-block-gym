@@ -32,6 +32,7 @@ const data = [
 export default function LayoutSider(props: ILayoutProps) {
 	const { collapsed } = props
 	const pathname = usePathname()
+
 	return (
 		<div
 			className="custom-tabs-container"
@@ -40,8 +41,8 @@ export default function LayoutSider(props: ILayoutProps) {
 				height: "95%",
 				width: "100%",
 				display: "flex",
+				gap: "1.5rem",
 				flexDirection: "column",
-				justifyContent: "space-between",
 			}}
 		>
 			<div className="custom-tab">
@@ -76,6 +77,7 @@ export default function LayoutSider(props: ILayoutProps) {
 						transition: "opacity 0.5s ease",
 						minWidth: "50px",
 					}}
+					onClick={() => {}}
 				>
 					<span
 						style={{

@@ -8,7 +8,11 @@ interface IDashboardLayOutRoot {
 }
 function DashboardLayOutRoot({ children }: IDashboardLayOutRoot) {
 	return (
-		<div>
+		<div
+			style={{
+				height: "100%",
+			}}
+		>
 			<DashboardLayOut>{children}</DashboardLayOut>
 		</div>
 	)

@@ -1,23 +1,46 @@
-import { createContext, useContext } from "react"
-// import { makePersistable } from "mobx-persist-store"
-import { makeAutoObservable } from "mobx"
+"use client"
+import { createContext, useContext, useEffect, useState } from "react"
+import { makeAutoObservable, runInAction } from "mobx"
+import BookingStore from "./modules/bookingStore"
+import { Skeleton } from "antd"
 
 class StoreValue {
+	BookingStore = new BookingStore()
 	constructor() {
 		makeAutoObservable(this, {}, { autoBind: true })
-		// makePersistable(this, {})
 	}
 }
 
-export const storeValue = new StoreValue()
+const StoreContext = createContext<StoreValue | null>(null)
 
-const StoreContext = createContext<StoreValue>(storeValue)
 interface StoreProps {
 	children: React.ReactElement
 }
 
 export const Store = ({ children }: StoreProps) => {
-	return <StoreContext.Provider value={storeValue}>{children}</StoreContext.Provider>
+	const [store, setStore] = useState<StoreValue | null>(null)
+
+	useEffect(() => {
+		// 确保只在客户端初始化
+		const initStore = () => {
+			const newStore = new StoreValue()
+			runInAction(() => {
+				setStore(newStore)
+			})
+		}
+
+		if (typeof window !== "undefined") {
+			initStore()
+		}
+	}, [])
+
+	if (!store) return <Skeleton />
+
+	return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
 }
 
-export const useStore = () => useContext(StoreContext)
+export const useStore = () => {
+	const store = useContext(StoreContext)
+	if (!store) throw new Error("Store 必须在 Provider 内使用")
+	return store
+}

@@ -26,7 +26,7 @@
 			width: 80%;
 			opacity: 0;
 			max-height: 0;
-			overflow: hidden;
+			// overflow: hidden;
 			transition: opacity 0.5s ease, max-height 0.5s ease;
 			// 元素激活状态
 			&.active {

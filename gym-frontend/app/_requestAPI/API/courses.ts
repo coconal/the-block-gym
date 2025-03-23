@@ -1,7 +1,9 @@
 import axiosInstance from "@/app/_utils/request"
 
-export const getAllCourses = async () => {
-	const { data } = await axiosInstance.post<API.Course.CourseListResponse>("/courses")
+export const getAllCourses = async (params: Model.Booking.BookingFilter) => {
+	const { data } = await axiosInstance.get<API.Course.CourseListResponse>("/courses", {
+		params,
+	})
 
 	return data
 }

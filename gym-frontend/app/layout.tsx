@@ -29,7 +29,11 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 							}}
 						>
 							<Header />
-							<div>
+							<div
+								style={{
+									height: "100%",
+								}}
+							>
 								<main>{children}</main>
 							</div>
 						</div>
