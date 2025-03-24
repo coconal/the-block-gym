@@ -1,5 +1,6 @@
 import { Router } from "express"
 import {
+	checkUserMembershipActive,
 	getMembership,
 	getUser,
 	getUserAllMembership,
@@ -10,6 +11,7 @@ import { protect } from "../controller/authController.js"
 const router = Router()
 
 router.route("/membership").get(protect, getUserAllMembership)
+router.route("/membership/check").get(protect, checkUserMembershipActive)
 router.route("/membership/:membershipId").get(protect, getMembership)
 router.route("/membership/purchase").post(protect, purchaseMembership)
 

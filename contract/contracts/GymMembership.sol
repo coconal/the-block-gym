@@ -126,6 +126,13 @@ contract GymMembership is ReentrancyGuard, Ownable {
         uint256 paymentAmount
     ) external onlyOwner nonReentrant {
         require(users[user].isActive == true, "No registration");
+        if (memberships[user].length > 0) {
+            require(
+                memberships[user][getMembershipLength(user) - 1].isActive ==
+                    false,
+                "Already has a membership"
+            );
+        }
         if (coach != address(0)) {
             // 记录会员信息
             memberships[user].push(
@@ -383,6 +390,11 @@ contract GymMembership is ReentrancyGuard, Ownable {
             payable(user).transfer(remainingAmount);
         }
         emit RefundIssued(user, remainingAmount);
+    }
+
+    // 错误操作，退回传入的 ETH
+    function refundETH(address user, uint256 amount) external onlyOwner {
+        payable(user).transfer(amount);
     }
 
     // 接收 ETH 的方法

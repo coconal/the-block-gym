@@ -1,0 +1,201 @@
+[
+  {
+    "_id": "67cd41e12654229ee413d716",
+    "coachimageurl": "",
+    "coachAddress": "0x0",
+    "price": 0.0260,
+    "duration": 30,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "BASIC",
+    "description": "basic membership"
+  },
+  {
+    "_id": "67cd424b12cfc636ecf361f1",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x0",
+    "price": 0.0557,
+    "duration": 90,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "BASIC"
+  },
+  {
+    "coachimageurl": "",
+    "coachAddress": "0x0",
+    "_id": "67cd429e12cfc636ecf361f4",
+    "price": 0.0900,
+    "duration": 180,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "BASIC",
+    "coachdAddress": "0x0",
+    "description": "basic membership"
+  },
+  {
+    "_id": "67cd42e012cfc636ecf361f7",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x0",
+    "price": 0.1500,
+    "duration": 360,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "BASIC"
+  },
+  {
+    "_id": "67cd43e012cfc636ecf361fa",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x0",
+    "price": 0.2856,
+    "duration": 720,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "BASIC"
+  },
+  {
+    "_id": "67cd47eedb3b4066d66d4d10",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "price": 0.0357,
+    "duration": 30,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "VIP"
+  },
+  {
+    "_id": "67cd4862db3b4066d66d4d13",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "price": 0.1500,
+    "duration": 180,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "VIP"
+  },
+  {
+    "_id": "67cd4883db3b4066d66d4d16",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "price": 0.2928,
+    "duration": 360,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "VIP"
+  },
+  {
+    "_id": "67cd48dbdb3b4066d66d4d19",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "price": 0.6285,
+    "duration": 30,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "Boxing"
+  },
+  {
+    "_id": "67cd48ffdb3b4066d66d4d1c",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "price": 0.1714,
+    "duration": 7,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "Boxing"
+  },
+  {
+    "_id": "67cd491edb3b4066d66d4d1f",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "price": 0.1500,
+    "duration": 7,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "Yoga"
+  },
+  {
+    "_id": "67cd492adb3b4066d66d4d22",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "price": 0.5499,
+    "duration": 30,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "Yoga"
+  },
+  {
+    "_id": "67cd49a7db3b4066d66d4d25",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "price": 0.1500,
+    "duration": 7,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "Zumba"
+  },
+  {
+    "_id": "67cd49b6db3b4066d66d4d28",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "price": 0.5499,
+    "duration": 30,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "Zumba"
+  },
+  {
+    "_id": "67cd49d1db3b4066d66d4d2b",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "price": 0.4714,
+    "duration": 30,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "SHAPING"
+  },
+  {
+    "_id": "67cd49e0db3b4066d66d4d2e",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "price": 0.1285,
+    "duration": 7,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "SHAPING"
+  },
+  {
+    "_id": "67cd4a03db3b4066d66d4d31",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "price": 0.6286,
+    "duration": 30,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "FAT_BURNING"
+  },
+  {
+    "_id": "67cd4a17db3b4066d66d4d34",
+    "description": "basic membership",
+    "coachimageurl": "",
+    "coachAddress": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "price": 0.6286,
+    "duration": 30,
+    "discount": 100,
+    "__v": 0,
+    "coursetype": "Swimming"
+  }
+]

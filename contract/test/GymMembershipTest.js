@@ -214,4 +214,26 @@ describe("GymMembership", function () {
 			expect(Number(await gymMembership.platformFee())).to.equal(newFee)
 		})
 	})
+
+	describe("error and refund to user", function () {
+		let id
+		let ipfsCertHash = generateTestIPFSHash()
+		beforeEach(async function () {
+			await gymMembership.connect(owner).registerUser(0, user.address)
+			await gymMembership.connect(owner).verifiedCoach(coach.address, ipfsCertHash)
+			await gymMembership
+				.connect(owner)
+				.purchaseMembership(coach.address, user.address, duration, paymentProof, paymentAmount)
+			id = (await gymMembership.getMembershipLength(user.address)) - 1n
+		})
+
+		it("refund to user", async function () {
+			await time.increase(7 * 24 * 60 * 60)
+			//9990.766021516914982529 ethers
+			console.log(await ethers.provider.getBalance(user.address))
+			await gymMembership.connect(owner).refundETH(user.address, ethers.parseEther("0.5"))
+			//9991.266021516914982529 ethers
+			console.log(await ethers.provider.getBalance(user.address))
+		})
+	})
 })

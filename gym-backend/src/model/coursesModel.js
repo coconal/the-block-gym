@@ -14,6 +14,10 @@ const courseSchema = new mongoose.Schema({
 		type: String,
 		default: "0x0",
 	},
+	coachimageurl: {
+		type: String,
+		default: "",
+	},
 	price: {
 		type: Number,
 		required: true,
