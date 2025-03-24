@@ -66,7 +66,7 @@ export default function LoginForm() {
 						(_, reject) =>
 							setTimeout(() => {
 								reject(new Error("签名操作超时，请重试"))
-							}, 10000) // 设置超时时间为 10 秒
+							}, 30000) // 设置超时时间为 10 秒
 					),
 				])
 				// console.log(signature)

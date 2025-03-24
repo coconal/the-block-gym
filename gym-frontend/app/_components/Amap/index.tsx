@@ -153,7 +153,6 @@ const AMapComponent = () => {
 			})
 		}
 	}, [activeMarkerIndex])
-	console.log(activeMarkerIndex)
 
 	return (
 		<React.Fragment>

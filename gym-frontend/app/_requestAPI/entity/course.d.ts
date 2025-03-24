@@ -8,6 +8,7 @@ declare global {
 				coursetype: string
 				description: string
 				coachAddress: string
+				coachimageurl: string
 				price: number
 				duration: number
 				discount: number

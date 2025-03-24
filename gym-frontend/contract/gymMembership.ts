@@ -79,8 +79,33 @@ export const wagmiContractConfig = {
 					name: "extendDuration",
 					type: "uint256",
 				},
+				{
+					indexed: false,
+					internalType: "bytes32",
+					name: "paymentProof",
+					type: "bytes32",
+				},
 			],
 			name: "DurationExtended",
+			type: "event",
+		},
+		{
+			anonymous: false,
+			inputs: [
+				{
+					indexed: true,
+					internalType: "address",
+					name: "sender",
+					type: "address",
+				},
+				{
+					indexed: false,
+					internalType: "uint256",
+					name: "amount",
+					type: "uint256",
+				},
+			],
+			name: "EtherReceived",
 			type: "event",
 		},
 		{
@@ -135,8 +160,45 @@ export const wagmiContractConfig = {
 					name: "duration",
 					type: "uint256",
 				},
+				{
+					indexed: false,
+					internalType: "bytes32",
+					name: "paymentProof",
+					type: "bytes32",
+				},
 			],
 			name: "MembershipPurchased",
+			type: "event",
+		},
+		{
+			anonymous: false,
+			inputs: [
+				{
+					indexed: true,
+					internalType: "address",
+					name: "from",
+					type: "address",
+				},
+				{
+					indexed: true,
+					internalType: "address",
+					name: "to",
+					type: "address",
+				},
+				{
+					indexed: false,
+					internalType: "uint256",
+					name: "originalId",
+					type: "uint256",
+				},
+				{
+					indexed: false,
+					internalType: "uint256",
+					name: "newId",
+					type: "uint256",
+				},
+			],
+			name: "MembershipTransferred",
 			type: "event",
 		},
 		{
@@ -197,6 +259,54 @@ export const wagmiContractConfig = {
 			type: "event",
 		},
 		{
+			stateMutability: "payable",
+			type: "fallback",
+		},
+		{
+			inputs: [],
+			name: "FULL_REFUND_WINDOW",
+			outputs: [
+				{
+					internalType: "uint256",
+					name: "",
+					type: "uint256",
+				},
+			],
+			stateMutability: "view",
+			type: "function",
+		},
+		{
+			inputs: [],
+			name: "REFUND_COOLDOWN",
+			outputs: [
+				{
+					internalType: "uint256",
+					name: "",
+					type: "uint256",
+				},
+			],
+			stateMutability: "view",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "address",
+					name: "user",
+					type: "address",
+				},
+				{
+					internalType: "uint256",
+					name: "id",
+					type: "uint256",
+				},
+			],
+			name: "adminForceRefund",
+			outputs: [],
+			stateMutability: "nonpayable",
+			type: "function",
+		},
+		{
 			inputs: [
 				{
 					internalType: "address",
@@ -216,6 +326,46 @@ export const wagmiContractConfig = {
 			type: "function",
 		},
 		{
+			inputs: [],
+			name: "deactivateUser",
+			outputs: [],
+			stateMutability: "nonpayable",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "uint256",
+					name: "id",
+					type: "uint256",
+				},
+				{
+					internalType: "address",
+					name: "user",
+					type: "address",
+				},
+				{
+					internalType: "uint256",
+					name: "extraDuration",
+					type: "uint256",
+				},
+				{
+					internalType: "bytes32",
+					name: "paymentProof",
+					type: "bytes32",
+				},
+				{
+					internalType: "uint256",
+					name: "paymentAmount",
+					type: "uint256",
+				},
+			],
+			name: "extendMembership",
+			outputs: [],
+			stateMutability: "nonpayable",
+			type: "function",
+		},
+		{
 			inputs: [
 				{
 					internalType: "address",
@@ -224,18 +374,19 @@ export const wagmiContractConfig = {
 				},
 				{
 					internalType: "uint256",
-					name: "id",
-					type: "uint256",
-				},
-				{
-					internalType: "uint256",
-					name: "extraDuration",
+					name: "_id",
 					type: "uint256",
 				},
 			],
-			name: "extendMembership",
-			outputs: [],
-			stateMutability: "payable",
+			name: "getLastRefundTime",
+			outputs: [
+				{
+					internalType: "uint256",
+					name: "",
+					type: "uint256",
+				},
+			],
+			stateMutability: "view",
 			type: "function",
 		},
 		{
@@ -394,6 +545,30 @@ export const wagmiContractConfig = {
 					type: "uint256",
 				},
 			],
+			name: "lastRefundTime",
+			outputs: [
+				{
+					internalType: "uint256",
+					name: "",
+					type: "uint256",
+				},
+			],
+			stateMutability: "view",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "address",
+					name: "",
+					type: "address",
+				},
+				{
+					internalType: "uint256",
+					name: "",
+					type: "uint256",
+				},
+			],
 			name: "memberships",
 			outputs: [
 				{
@@ -474,14 +649,47 @@ export const wagmiContractConfig = {
 					type: "address",
 				},
 				{
+					internalType: "address",
+					name: "user",
+					type: "address",
+				},
+				{
 					internalType: "uint256",
 					name: "duration",
+					type: "uint256",
+				},
+				{
+					internalType: "bytes32",
+					name: "paymentProof",
+					type: "bytes32",
+				},
+				{
+					internalType: "uint256",
+					name: "paymentAmount",
 					type: "uint256",
 				},
 			],
 			name: "purchaseMembership",
 			outputs: [],
-			stateMutability: "payable",
+			stateMutability: "nonpayable",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "address",
+					name: "user",
+					type: "address",
+				},
+				{
+					internalType: "uint256",
+					name: "amount",
+					type: "uint256",
+				},
+			],
+			name: "refundETH",
+			outputs: [],
+			stateMutability: "nonpayable",
 			type: "function",
 		},
 		{
@@ -549,6 +757,24 @@ export const wagmiContractConfig = {
 				},
 			],
 			name: "setPlatformFee",
+			outputs: [],
+			stateMutability: "nonpayable",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "uint256",
+					name: "id",
+					type: "uint256",
+				},
+				{
+					internalType: "address",
+					name: "newOwner",
+					type: "address",
+				},
+			],
+			name: "transferMembership",
 			outputs: [],
 			stateMutability: "nonpayable",
 			type: "function",
@@ -631,6 +857,10 @@ export const wagmiContractConfig = {
 			],
 			stateMutability: "view",
 			type: "function",
+		},
+		{
+			stateMutability: "payable",
+			type: "receive",
 		},
 	],
 } as const

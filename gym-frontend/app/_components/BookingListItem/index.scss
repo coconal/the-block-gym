@@ -1,4 +1,6 @@
 .custom-list-title-hover {
+	display: inline-block;
+	cursor: pointer;
 	&:hover {
 		color: rgb(190, 157, 157) !important;
 	}

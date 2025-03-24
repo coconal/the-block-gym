@@ -51,25 +51,49 @@ export default function About() {
 					<Card
 						hoverable
 						style={{ width: 240 }}
-						cover={<Image alt="coach1" src={coach1} placeholder="blur" quality={10} width={240} />}
+						cover={
+							<Image
+								alt="coach1"
+								src={"https://gym-block.oss-cn-beijing.aliyuncs.com/coach/coach1.png"}
+								height={352}
+								quality={80}
+								width={240}
+							/>
+						}
 					>
 						<Meta title="GUYS" description="" />
 					</Card>
 					<Card
 						hoverable
 						style={{ width: 240 }}
-						cover={<Image alt="coach2" src={coach2} placeholder="blur" quality={60} width={240} />}
+						cover={
+							<Image
+								alt="coach2"
+								src="https://gym-block.oss-cn-beijing.aliyuncs.com/coach/coach2.png"
+								quality={60}
+								height={352}
+								width={240}
+							/>
+						}
 					>
 						<Meta title="Jotaro Kujo" description="" />
 					</Card>
 					<Card
 						hoverable
 						style={{ width: 240 }}
-						cover={<Image alt="coach3" src={coach3} placeholder="blur" quality={60} width={240} />}
+						cover={
+							<Image
+								alt="coach3"
+								src={"https://gym-block.oss-cn-beijing.aliyuncs.com/coach/coach3.png"}
+								quality={60}
+								height={352}
+								width={240}
+							/>
+						}
 					>
 						<Meta title="Leon" description="" />
 					</Card>
-					<Link href="/course">
+					<Link href="/dashboard">
 						<Card hoverable style={{ width: "100px", height: "100%" }}>
 							<Meta title="more" description=" ......" />
 						</Card>

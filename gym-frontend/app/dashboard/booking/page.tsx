@@ -1,4 +1,5 @@
 "use client"
+
 import BookingListItem from "@/app/_components/BookingListItem"
 import { getAllCourses } from "@/app/_requestAPI/API/courses"
 import { useStore } from "@/app/_store"
@@ -6,6 +7,7 @@ import { useQuery } from "@tanstack/react-query"
 import { Empty, List, Card, Space, Input, Select, Switch } from "antd"
 import { toJS } from "mobx"
 import { observer } from "mobx-react-lite"
+import { useState } from "react"
 import toast from "react-hot-toast"
 
 const BookingPage = observer(() => {
@@ -16,7 +18,6 @@ const BookingPage = observer(() => {
 		queryFn: () => getAllCourses(courseFilter),
 	})
 	const courseList = data?.courses || []
-
 	return (
 		<div
 			style={{
