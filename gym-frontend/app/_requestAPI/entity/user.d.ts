@@ -7,6 +7,15 @@ declare global {
 				data: string
 				message: string
 			}
+			declare type UserEntity = {
+				_id: string
+				__v: number
+				userimgae: string
+				address: string
+				role: "user" | "coach" | "admin"
+				verifiedHash: string
+				username: string
+			}
 
 			declare type PurchaseParams = {
 				id: string

@@ -52,6 +52,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
 									colorPrimaryHover: "#9fd8f9fb", // 开关悬停颜色
 									colorPrimaryActive: "#9fd8f9fb", // 开关激活颜色
 								},
+								Table: {
+									colorText: "#363131e6",
+									colorBgContainer: "#cbcbcbe6",
+									colorBgBase: "#646465e6",
+									headerBg: "#b1b1b1e6",
+									headerSplitColor: "#dcdcdce6",
+									headerColor: "#4a5568e6",
+								},
 							},
 						}}
 					>

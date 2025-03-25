@@ -29,9 +29,7 @@ export default function BookingListItem(props: IBookingListItem) {
 	const mutation = useMutation({
 		mutationFn: async () => {
 			const { data: check } = await checkUserHaveCourse()
-			console.log(check)
-
-			if (!check?.data[0].isActive) {
+			if (!check?.data[0]?.isActive) {
 				const paymentProof = await sendTransactionAsync({
 					to: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
 					value: parseEther(item.price.toString()),

@@ -11,6 +11,7 @@ export default function AuthPage() {
 	const [alignValue, setAlignValue] = useState<Align>("Login")
 	const { status } = useAccount()
 	type Align = "Login" | "Signup"
+
 	return (
 		<div
 			style={{
@@ -27,7 +28,6 @@ export default function AuthPage() {
 						style={{ marginBottom: 8 }}
 						onChange={setAlignValue}
 						options={["Login", "Signup"]}
-						disabled={status === "disconnected"}
 					/>
 				</div>
 				<div className="main-content">

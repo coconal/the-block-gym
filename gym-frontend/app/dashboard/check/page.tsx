@@ -1,3 +1,9 @@
+import CheckPageComponent from "@/app/_components/CheckPage"
+
 export default function CheckPage() {
-	return <div>1</div>
+	return (
+		<div>
+			<CheckPageComponent />
+		</div>
+	)
 }

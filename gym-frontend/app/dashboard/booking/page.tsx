@@ -1,13 +1,14 @@
 "use client"
 
 import BookingListItem from "@/app/_components/BookingListItem"
+import DataLoading from "@/app/_components/Loading/DataLoading"
 import { getAllCourses } from "@/app/_requestAPI/API/courses"
 import { useStore } from "@/app/_store"
 import { useQuery } from "@tanstack/react-query"
 import { Empty, List, Card, Space, Input, Select, Switch } from "antd"
 import { toJS } from "mobx"
 import { observer } from "mobx-react-lite"
-import { useState } from "react"
+
 import toast from "react-hot-toast"
 
 const BookingPage = observer(() => {
@@ -18,6 +19,7 @@ const BookingPage = observer(() => {
 		queryFn: () => getAllCourses(courseFilter),
 	})
 	const courseList = data?.courses || []
+
 	return (
 		<div
 			style={{
@@ -129,28 +131,17 @@ const BookingPage = observer(() => {
 							>
 								<span style={{ color: "bisque" }}>仅显打折课程</span>
 								<Switch
-									onChange={(checked) =>
+									checked={courseFilter?.Isdiscount === 1}
+									onChange={(checked) => {
 										store?.BookingStore.setCourseFilter({ Isdiscount: checked ? 1 : 0 })
-									}
+									}}
 								/>
 							</div>
 						</Space>
 					</Space>
 				</Card>
 				{isPending ? (
-					<div
-						style={{
-							width: "100%",
-							height: "100%",
-							display: "flex",
-							justifyContent: "center",
-							alignItems: "center",
-							fontSize: "2rem",
-							fontWeight: "bold",
-						}}
-					>
-						Loading...
-					</div>
+					<DataLoading />
 				) : courseList.length === 0 ? (
 					<Empty />
 				) : (

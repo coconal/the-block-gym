@@ -24,7 +24,6 @@ const data = [
 	{ name: "Check", icon: <CheckIcon />, role: "user" },
 	{ name: "Schedule", icon: <CalendarMonthIcon />, role: "user" },
 	{ name: "Renew", icon: <AlarmAddRoundedIcon />, role: "user" },
-	{ name: "Report", icon: <CalendarMonthIcon />, role: "user" },
 	{ name: "Request", icon: <RequestQuoteIcon />, role: "user" },
 	{ name: "ManageUser", icon: <ManageAccountsRoundedIcon />, role: "admin" },
 	{ name: "Settings", icon: <SettingsIcon />, role: "user" },
