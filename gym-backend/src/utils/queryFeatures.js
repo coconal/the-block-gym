@@ -25,8 +25,10 @@ class QueryFeatures {
 		if (queryCopy.coachaddress) {
 			queryConditions.coachAddress = queryCopy.coachaddress
 		}
-		if (queryCopy.Isdiscount === 1) {
+		if (queryCopy.Isdiscount === "1") {
 			queryConditions.discount = { $lt: 100 }
+		} else {
+			queryConditions.discount = { $gte: 0 }
 		}
 		this.query = this.query.find(queryConditions)
 		return this

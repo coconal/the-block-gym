@@ -12,7 +12,7 @@ const router = Router()
 
 router.route("/membership").get(protect, getUserAllMembership)
 router.route("/membership/check").get(protect, checkUserMembershipActive)
-router.route("/membership/:membershipId").get(protect, getMembership)
+router.route("/membership/:index").get(protect, getMembership)
 router.route("/membership/purchase").post(protect, purchaseMembership)
 
 router.get("/getMe", protect, getUser)

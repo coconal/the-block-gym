@@ -46,19 +46,23 @@ export const getUser = async (req, res) => {
 }
 
 export const getMembership = async (req, res) => {
-	const { membershipId } = req.params
+	const { index } = req.params
 	const useraddress = req.user.address
 
 	try {
-		const result = await contract.read.getMembership([useraddress])
+		const user = await User.findOne({ address: useraddress })
+		const membership = await UserMembership.findOne({
+			userId: user._id,
+			index,
+		})
 
-		if (result.length === 0) {
-			return res.status(404).json({ message: "Membership not found" })
+		if (!membership) {
+			return res.status(200).json({ data: {}, message: "Membership not found" })
 		}
-		const r = JSONbig.stringify(result[membershipId])
-		const data = await JSON.parse(r)
+
 		res.status(200).json({
-			data,
+			data: membership,
+			message: "Membership founded",
 		})
 	} catch (error) {
 		console.error("Get Membership error:", error.message)
@@ -85,22 +89,22 @@ export const getUserAllMembership = async (req, res) => {
 	const useraddress = req.user.address
 
 	try {
-		const result = await contract.read.getMembership([useraddress])
-		// 处理返回的会员信息数组
-		const memberships = result.map((item, index) => {
-			const r = JSONbig.stringify(item)
-			const membership = JSON.parse(r)
-			return {
-				...membership,
-				id: index,
-			}
+		const user = await User.findOne({ address: useraddress })
+		const memberships = await UserMembership.find({
+			userId: user._id,
 		})
-		console.log(memberships)
 
+		if (!memberships) {
+			return res.status(200).json({ data: [], message: "Membership not found" })
+		}
 		res.status(200).json({
 			data: memberships,
+			message: "Membership founded",
 		})
-	} catch (error) {}
+	} catch (error) {
+		console.error("Get Membership error:", error.message)
+		res.status(500).json({ error: "Internal server error" })
+	}
 }
 
 export const purchaseMembership = async (req, res) => {
@@ -117,6 +121,12 @@ export const purchaseMembership = async (req, res) => {
 
 		// 验证2：交易金额匹配会员价格
 		const course = await Course.findById({ _id: id })
+		if (!course) {
+			return res.status(400).json({ error: "Course not found" })
+		}
+		if (course.duration !== duration) {
+			return res.status(400).json({ error: "Duration mismatch" })
+		}
 		const priceEth = parseEther(course.price.toString())
 
 		if (transaction.value !== priceEth) {
@@ -136,13 +146,10 @@ export const purchaseMembership = async (req, res) => {
 
 		// 验证5：用户是否有课程没有过期
 		const memberships = await contract.read.getMembership([useraddress])
-		console.log(memberships)
 
 		if (memberships.length > 0) {
 			const r = JSONbig.stringify(memberships[memberships.length - 1])
 			const membership = JSON.parse(r)
-			console.log("membership", membership)
-
 			if (membership.isActive) {
 				return res.status(400).json({ error: "You have an active membership!!" })
 			}
@@ -159,24 +166,30 @@ export const purchaseMembership = async (req, res) => {
 			paymentProof,
 			transaction.value,
 		])
+
 		res.status(200).json({
 			data: result,
 			message: "Purchase successful",
 		})
 
 		const user = await User.findOne({ address: useraddress })
-
 		// 创建用户会员记录
-		const coursepurchase = await UserMembership.create({
+		const chainMemberships = await contract.read.getMembership([useraddress])
+		const index = chainMemberships.length === 0 ? 0 : chainMemberships.length
+		const test = await UserMembership.create({
 			userId: user._id,
 			courseId: id,
 			// 存在时间差距
-			expireAt: new Date(Date.now() + durationtime * 1000),
+			index,
+			expireAt: new Date(
+				Number(chainMemberships[index - 1].startTime) * 1000 + durationtime * 1000
+			),
 			isActive: true,
 			coursepurchasedhash: result,
 		})
+		console.log(test)
 	} catch (error) {
-		console.log()
+		console.log(error.message)
 	}
 }
 
@@ -197,7 +210,6 @@ export const checkUserMembershipActive = async (req, res) => {
 			membership[membership.length - 1].startTime + membership[membership.length - 1].duration
 		const now = Date.now()
 		const user = await User.findOne({ address: useraddress })
-		console.log(now > expireAt * 1000)
 		if (now > expireAt * 1000) {
 			UserMembership.updateOne({ courseId: id, userId: user._id }, { isActive: false })
 			return res.status(200).json({
@@ -211,7 +223,10 @@ export const checkUserMembershipActive = async (req, res) => {
 			message: "Check successful",
 		})
 	} catch (error) {
-		console.error("Check User Membership Active error:", error)
+		console.error("Check User Membership Active error:", error.shortMessage)
+		if (error.shortMessage.split(" ").at(-1).match("0x")) {
+			res.status(404).json({ error: "user not registered" })
+		}
 	}
 }
 

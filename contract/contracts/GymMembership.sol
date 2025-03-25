@@ -270,9 +270,36 @@ contract GymMembership is ReentrancyGuard, Ownable {
         coachCut = releasable - platformCut;
     }
 
+    // 获取没有教练释放资金
+    function ReleaseFundsNoCoach(
+        address user,
+        uint256 id
+    ) public nonReentrant returns (uint256 releasable) {
+        Membership storage membership = memberships[user][id];
+        // 计算已服务时间比例
+        uint256 elapsed = block.timestamp - membership.startTime >
+            membership.duration
+            ? membership.startTime +
+                membership.duration -
+                membership.lastReleaseTime
+            : block.timestamp - membership.lastReleaseTime;
+        uint256 releaseRatio = (elapsed * 1e18) / membership.duration;
+
+        // 计算可释放金额
+        membership.lastReleaseTime = block.timestamp;
+        releasable = (membership.totalAmount * releaseRatio) / 1e18;
+        membership.releasedAmount += releasable;
+        if (block.timestamp - membership.startTime >= membership.duration) {
+            membership.isActive = false;
+        }
+
+        payable(owner()).transfer(releasable);
+    }
+
     // 按服务进度释放资金
     function releaseFunds(address user, uint256 id) public nonReentrant {
         Membership storage membership = memberships[user][id];
+        require(membership.privatecoach != address(0), "No coach");
         // require(
         //     block.timestamp > membership.lastReleaseTime + 3 days,
         //     "3d cooldown"
@@ -286,10 +313,7 @@ contract GymMembership is ReentrancyGuard, Ownable {
 
         // 更新状态
         membership.releasedAmount += releasable;
-        membership.lastReleaseTime = block.timestamp - membership.startTime >
-            membership.duration
-            ? membership.duration + membership.startTime
-            : block.timestamp;
+        membership.lastReleaseTime = block.timestamp;
         if (membership.releasedAmount == membership.totalAmount) {
             membership.isActive = false;
         }

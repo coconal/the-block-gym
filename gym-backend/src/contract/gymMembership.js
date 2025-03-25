@@ -301,6 +301,30 @@ export const ContractConfig = {
 					type: "uint256",
 				},
 			],
+			name: "ReleaseFundsNoCoach",
+			outputs: [
+				{
+					internalType: "uint256",
+					name: "releasable",
+					type: "uint256",
+				},
+			],
+			stateMutability: "nonpayable",
+			type: "function",
+		},
+		{
+			inputs: [
+				{
+					internalType: "address",
+					name: "user",
+					type: "address",
+				},
+				{
+					internalType: "uint256",
+					name: "id",
+					type: "uint256",
+				},
+			],
 			name: "adminForceRefund",
 			outputs: [],
 			stateMutability: "nonpayable",

@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx nodemon src/app.js",
-    "script": "node ./src/scripts/insertCourses.js"
+    "script:insertCourses": "node ./src/scripts/insertCourses.js",
+    "script:insertUserMembership": "node ./src/scripts/insertUserMembership.js"
   },
   "author": "",
   "license": "ISC",

@@ -6,7 +6,7 @@
     "init": "npx hardhat run scripts/seed.js --network localhost"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-toolbox": "^5.0T.0",
     "hardhat": "^2.22.18"
   },
   "dependencies": {

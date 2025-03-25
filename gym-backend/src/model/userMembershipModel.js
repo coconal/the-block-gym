@@ -15,6 +15,10 @@ const userMembershipSchema = new mongoose.Schema({
 		type: Date,
 		required: true,
 	},
+	index: {
+		type: Number,
+		required: true,
+	},
 	isActive: {
 		type: Boolean,
 		default: true,
@@ -23,6 +27,35 @@ const userMembershipSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	releaseHashs: {
+		type: [String],
+		default: [],
+	},
+})
+userMembershipSchema.set("toJSON", {
+	virtuals: true,
+	transform: function (doc, ret) {
+		// 删除不需要显示的字段
+		delete ret.courseId
+		return ret
+	},
+})
+userMembershipSchema.set("toObject", { virtuals: true })
+
+userMembershipSchema.virtual("courseInfo", {
+	ref: "courses",
+	localField: "courseId",
+	foreignField: "_id",
+	justOne: true,
+})
+
+userMembershipSchema.pre(/^find/, function (next) {
+	this.populate({
+		path: "courseInfo",
+		select: "-_id -__v",
+	})
+
+	next()
 })
 
 const UserMembership = mongoose.model("userMemberships", userMembershipSchema)

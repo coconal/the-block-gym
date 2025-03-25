@@ -27,10 +27,6 @@ const userSchema = new mongoose.Schema({
 		enum: ["user", "coach", "admin"],
 		required: true,
 	},
-	// registrationDate:{
-	// 	type: Date,
-	// 	required: true,
-	// },
 	verifiedHash: {
 		type: String,
 		required: true,
@@ -42,5 +38,5 @@ const userSchema = new mongoose.Schema({
 	},
 })
 
-const User = mongoose.model("User", userSchema)
+const User = mongoose.model("users", userSchema)
 export default User
