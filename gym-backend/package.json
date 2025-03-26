@@ -8,7 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx nodemon src/app.js",
     "script:insertCourses": "node ./src/scripts/insertCourses.js",
-    "script:insertUserMembership": "node ./src/scripts/insertUserMembership.js"
+    "script:insertUserMembership": "node ./src/scripts/insertUserMembership.js",
+    "script:insertCoursePlan": "node ./src/scripts/insertCoursePlan.js",
+    "script:insertSchedules": "node ./src/scripts/insertSchedules.js"
   },
   "author": "",
   "license": "ISC",

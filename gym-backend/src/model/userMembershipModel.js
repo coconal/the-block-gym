@@ -34,11 +34,6 @@ const userMembershipSchema = new mongoose.Schema({
 })
 userMembershipSchema.set("toJSON", {
 	virtuals: true,
-	transform: function (doc, ret) {
-		// 删除不需要显示的字段
-		delete ret.courseId
-		return ret
-	},
 })
 userMembershipSchema.set("toObject", { virtuals: true })
 

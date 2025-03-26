@@ -45,23 +45,23 @@ export const getUser = async (req, res) => {
 	}
 }
 
-export const getMembership = async (req, res) => {
-	const { index } = req.params
+export const getMembershipActive = async (req, res) => {
 	const useraddress = req.user.address
 
 	try {
 		const user = await User.findOne({ address: useraddress })
-		const membership = await UserMembership.findOne({
+		const memberships = await UserMembership.find({
 			userId: user._id,
-			index,
 		})
-
-		if (!membership) {
-			return res.status(200).json({ data: {}, message: "Membership not found" })
+		if (memberships.length === 0) {
+			return res.status(200).json({ data: [], message: "Membership not found" })
 		}
-
+		const activeMemberships = memberships.filter((membership) => membership.isActive)
+		if (activeMemberships.length === 0) {
+			return res.status(200).json({ data: [], message: "Membership not found" })
+		}
 		res.status(200).json({
-			data: membership,
+			data: activeMemberships,
 			message: "Membership founded",
 		})
 	} catch (error) {
@@ -180,7 +180,7 @@ export const purchaseMembership = async (req, res) => {
 			userId: user._id,
 			courseId: id,
 			// 存在时间差距
-			index,
+			index: index - 1,
 			expireAt: new Date(
 				Number(chainMemberships[index - 1].startTime) * 1000 + durationtime * 1000
 			),

@@ -171,22 +171,22 @@ contract GymMembership is ReentrancyGuard, Ownable {
         );
     }
 
-    // 延长会员有效期
-    function extendMembership(
-        uint256 id,
-        address user,
-        uint256 extraDuration,
-        bytes32 paymentProof,
-        uint256 paymentAmount
-    ) external onlyOwner nonReentrant {
-        Membership storage m = memberships[user][id];
-        require(m.isActive, "No active membership");
+    // // 延长会员有效期
+    // function extendMembership(
+    //     uint256 id,
+    //     address user,
+    //     uint256 extraDuration,
+    //     bytes32 paymentProof,
+    //     uint256 paymentAmount
+    // ) external onlyOwner nonReentrant {
+    //     Membership storage m = memberships[user][id];
+    //     require(m.isActive, "No active membership");
 
-        m.totalAmount += paymentAmount;
-        m.duration += extraDuration;
+    //     m.totalAmount += paymentAmount;
+    //     m.duration += extraDuration;
 
-        emit DurationExtended(user, id, extraDuration, paymentProof);
-    }
+    //     emit DurationExtended(user, id, extraDuration, paymentProof);
+    // }
 
     // 转让会员
     function transferMembership(

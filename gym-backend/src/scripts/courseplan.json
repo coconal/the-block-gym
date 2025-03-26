@@ -1,0 +1,134 @@
+[
+    {
+        "courseType": "VIP",
+        "plan": [
+            {
+                "day": 1,
+                "title": "全身力量训练",
+                "content": "胸部和背部：杠铃卧推4组，引体向上4组；腿部：深蹲4组，硬拉4组",
+                "minutes": 100
+            },
+            {
+                "day": 3,
+                "title": "有氧耐力训练",
+                "content": "30分钟跑步，20分钟单车，20分钟划船机",
+                "minutes": 70
+            },
+            {
+                "day": 5,
+                "title": "核心训练",
+                "content": "平板支撑，腹部训练，背部核心训练",
+                "minutes": 60
+            }
+        ]
+    },
+    {
+        "courseType": "Boxing",
+        "plan": [
+            {
+                "day": 2,
+                "title": "拳击基础训练",
+                "content": "直拳、摆拳基础练习，跳绳热身15分钟",
+                "minutes": 60
+            },
+            {
+                "day": 4,
+                "title": "组合技术训练",
+                "content": "拳击组合技术，沙袋练习，移动步伐",
+                "minutes": 90
+            },
+            {
+                "day": 5,
+                "title": "实战训练",
+                "content": "拳击实战练习，对抗训练，拳击比赛",
+                "minutes": 90
+            }
+        ]
+    },
+    {
+        "courseType": "Yoga",
+        "plan": [
+            {
+                "day": 1,
+                "title": "基础瑜伽",
+                "content": "站姿体式，坐姿体式，呼吸练习",
+                "minutes": 100
+            },
+            {
+                "day": 3,
+                "title": "流瑜伽",
+                "content": "太阳礼拜A和B，战士系列体式",
+                "minutes": 75
+            },
+            {
+                "day": 5,
+                "title": "瑜伽拉伸",
+                "content": "瑜伽拉伸体式，呼吸练习",
+                "minutes": 60
+            }
+        ]
+    },
+    {
+        "courseType": "SHAPING",
+        "plan": [
+            {
+                "day": 2,
+                "title": "下肢塑形",
+                "content": "臀腿训练，弹力带练习，腿部拉伸",
+                "minutes": 60
+            },
+            {
+                "day": 4,
+                "title": "上肢塑形",
+                "content": "手臂训练，背部塑形，肩部训练",
+                "minutes": 60
+            },
+            {
+                "day": 6,
+                "title": "核心训练",
+                "content": "腹部训练，核心训练，腰部拉伸",
+                "minutes": 60
+            }
+        ]
+    },
+    {
+        "courseType": "FAT_BURNING",
+        "plan": [
+            {
+                "day": 1,
+                "title": "HIIT训练",
+                "content": "高强度间歇：波比跳、山climbers、深蹲跳",
+                "minutes": 60
+            },
+            {
+                "day": 3,
+                "title": "燃脂训练",
+                "content": "有氧运动30分钟，力量训练30分钟",
+                "minutes": 60
+            },
+            {
+                "day": 5,
+                "title": "有氧耐力训练",
+                "content": "跑步机、划船机、单车",
+                "minutes": 100
+            }
+        ]
+    },
+    {
+        "courseType": "Swimming",
+        "plan": [
+            {
+                "day": 2,
+                "title": "基础泳姿训练",
+                "content": "自由泳和蛙泳技术训练，换气练习",
+                "minutes": 60
+            },
+            {
+                "day": 4,
+                "title": "耐力训练",
+                "content": "中长距离游泳训练，间歇训练",
+                "minutes": 75
+            }
+        ]
+    }
+]
