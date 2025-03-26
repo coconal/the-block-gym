@@ -13,13 +13,12 @@ class BookingStore {
 	}
 	constructor() {
 		makeAutoObservable(this, {}, { autoBind: true })
-		if (typeof window !== "undefined") {
-			makePersistable(this, {
-				name: "BookingStore",
-				properties: ["courseFilter"],
-				storage: typeof window !== "undefined" ? window.sessionStorage : undefined,
-			})
-		}
+
+		makePersistable(this, {
+			name: "BookingStore",
+			properties: ["courseFilter"],
+			storage: typeof window !== "undefined" ? window.sessionStorage : undefined,
+		})
 	}
 
 	setCourseFilter<K extends keyof Model.Booking.CourseFilter>(

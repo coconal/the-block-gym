@@ -86,13 +86,13 @@ const BookingPage = observer(() => {
 								style={{ width: 150 }}
 								options={[
 									{ value: 0, label: "全部价格" },
-									{ value: 500, label: "500以下" },
-									{ value: 800, label: "800以下" },
-									{ value: 1000, label: "1000以下" },
-									{ value: 1500, label: "1500以下" },
-									{ value: 3000, label: "3000以下" },
-									{ value: 4000, label: "4000以下" },
-									{ value: 5000, label: "5000以下" },
+									{ value: 0.05, label: "0.05ETH 以下" },
+									{ value: 0.1, label: "0.10ETH 以下" },
+									{ value: 0.15, label: "0.15ETH以下" },
+									{ value: 0.2, label: "0.20ETH以下" },
+									{ value: 0.3, label: "0.30ETH以下" },
+									{ value: 0.4, label: "0.40ETH以下" },
+									{ value: 0.5, label: "0.50ETH以下" },
 								]}
 								onChange={(value) => store?.BookingStore.setCourseFilter({ maxprice: value })}
 							/>

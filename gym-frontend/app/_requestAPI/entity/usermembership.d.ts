@@ -6,6 +6,7 @@ declare global {
 			declare type Membership = {
 				_id: string
 				userId: string
+				courseId: string
 				__v: number
 				expireAt: string
 				index: number
@@ -17,10 +18,6 @@ declare global {
 			declare type MembershipResponse = {
 				data: membership[]
 				message: string
-			}
-
-			declare type MembershipParams = {
-				index: number
 			}
 		}
 	}

@@ -12,5 +12,11 @@ declare global {
 				orderby: "asc" | "desc"
 			}
 		}
+		declare namespace Course {
+			interface CurrentCourse {
+				courseId: string
+				expireAt: string
+			}
+		}
 	}
 }

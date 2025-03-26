@@ -9,11 +9,11 @@ import SettingsIcon from "@mui/icons-material/Settings"
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"
 import CheckIcon from "@mui/icons-material/Check"
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote"
-import AlarmAddRoundedIcon from "@mui/icons-material/AlarmAddRounded"
 import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded"
-import { Button } from "antd"
+import { Button, Modal } from "antd"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useState } from "react"
 
 interface ILayoutProps {
 	collapsed: boolean
@@ -23,14 +23,22 @@ const data = [
 	{ name: "Booking", icon: <InboxIcon />, role: "user" },
 	{ name: "Check", icon: <CheckIcon />, role: "user" },
 	{ name: "Schedule", icon: <CalendarMonthIcon />, role: "user" },
-	{ name: "Renew", icon: <AlarmAddRoundedIcon />, role: "user" },
 	{ name: "Request", icon: <RequestQuoteIcon />, role: "user" },
 	{ name: "ManageUser", icon: <ManageAccountsRoundedIcon />, role: "admin" },
 	{ name: "Settings", icon: <SettingsIcon />, role: "user" },
 ]
 export default function LayoutSider(props: ILayoutProps) {
+	const [isModalOpen, setIsModalOpen] = useState(false)
 	const { collapsed } = props
 	const pathname = usePathname()
+	const handleLogout = () => {
+		setIsModalOpen(true)
+	}
+	const handleCancel = () => {
+		setIsModalOpen(false)
+	}
+
+	const handleOk = () => {}
 
 	return (
 		<div
@@ -76,7 +84,9 @@ export default function LayoutSider(props: ILayoutProps) {
 						transition: "opacity 0.5s ease",
 						minWidth: "50px",
 					}}
-					onClick={() => {}}
+					onClick={() => {
+						setIsModalOpen(true)
+					}}
 				>
 					<span
 						style={{
@@ -88,6 +98,16 @@ export default function LayoutSider(props: ILayoutProps) {
 						{"Logout"}
 					</span>
 				</Button>
+				<Modal
+					title="确认退出"
+					open={isModalOpen}
+					onOk={handleOk}
+					onCancel={handleCancel}
+					okText="确认"
+					cancelText="取消"
+				>
+					<p>确定要退出登录吗？</p>
+				</Modal>
 			</div>
 		</div>
 	)

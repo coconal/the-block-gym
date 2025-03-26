@@ -1,0 +1,36 @@
+.small-calendar {
+	padding: 4px;
+	.ant-picker-calendar-header {
+		padding: 8px;
+		.ant-select {
+			width: 60px;
+		}
+	}
+
+	.ant-picker-content {
+		th,
+		td {
+			height: 50px !important; // 减小格子高度
+			padding: 2px !important; // 减小格子内边距
+		}
+
+		td {
+			.ant-picker-cell-inner {
+				height: 100% !important;
+				display: flex;
+				flex-direction: column;
+
+				.ant-picker-calendar-date-value {
+					margin: 2px;
+					font-size: 12px;
+				}
+
+				.ant-picker-calendar-date-content {
+					flex: 1;
+					padding: 4px;
+					overflow: hidden;
+				}
+			}
+		}
+	}
+}

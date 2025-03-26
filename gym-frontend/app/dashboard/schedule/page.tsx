@@ -1,3 +1,9 @@
+import SchedulePageComponent from "@/app/_components/SchedulePageComponent"
+
 export default function SchedulePage() {
-	return <div></div>
+	return (
+		<div>
+			<SchedulePageComponent />
+		</div>
+	)
 }
