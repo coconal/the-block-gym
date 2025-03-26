@@ -1,6 +1,6 @@
 "use client"
 
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, QueryClient } from "@tanstack/react-query"
 import { Alert, AlertProps, Button, Snackbar, SnackbarOrigin } from "@mui/material"
 import { Flex } from "antd"
 import { useState } from "react"
@@ -27,6 +27,7 @@ export default function LoginForm() {
 		open: false,
 		message: "",
 	})
+	const queryClient = new QueryClient()
 	const { open } = state
 	const { address, isConnected } = useAccount()
 	const { signMessageAsync } = useSignMessage()
@@ -100,6 +101,7 @@ export default function LoginForm() {
 				localStorage.setItem("web3_token", data.token)
 				toast.success("login successfully", { duration: 2000 })
 			}
+			queryClient.invalidateQueries({ queryKey: ["checkUserAuth"] })
 		},
 		onError: (err: Error) => {
 			toast.error("login failed: " + err.message, { duration: 5000 })

@@ -14,3 +14,13 @@ export async function checkUserHaveCourse() {
 	)
 	return res
 }
+
+export async function logout() {
+	const res = await axiosInstance.post<API.User.logOutResponse>("/user/logout")
+	return res
+}
+
+export async function checkUserAuth() {
+	const res = await axiosInstance.get<API.User.checkAuthResponse>("/user/checkAuth")
+	return res
+}

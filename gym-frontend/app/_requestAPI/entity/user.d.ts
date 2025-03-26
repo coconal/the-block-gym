@@ -36,6 +36,14 @@ declare global {
 				data: MembershipEntity[]
 				message: string
 			}
+			declare type logOutResponse = {
+				success: boolean
+				message: string
+			}
+			declare type checkAuthResponse = {
+				success: boolean
+				message: string
+			}
 		}
 	}
 }

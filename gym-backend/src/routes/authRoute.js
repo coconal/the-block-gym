@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { login, signup } from "../controller/authController.js"
+import { checkToken, login, logout, protect, signup } from "../controller/authController.js"
 import { getNonce } from "../controller/userController.js"
 import rateLimit from "express-rate-limit"
 
@@ -10,7 +10,7 @@ const registerLimiter = rateLimit({
 	message: "该 IP 今日注册次数已达上限",
 })
 
-// 每个 IP 每小时最多登录 3 次
+// 每个 IP 每小时最多登录 * 次
 const loginLimiter = rateLimit({
 	windowMs: 24 * 60 * 60 * 1000,
 	max: 5,
@@ -20,7 +20,9 @@ const loginLimiter = rateLimit({
 const router = Router()
 
 router.get("/nonce/:address", getNonce)
+router.get("/checkAuth", protect, checkToken)
 router.post("/signup", registerLimiter, signup)
 router.post("/login", loginLimiter, login)
+router.post("/logout", protect, logout)
 
 export default router

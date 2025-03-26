@@ -1,6 +1,6 @@
 "use client"
 import { makeAutoObservable } from "mobx"
-import { makePersistable } from "mobx-persist-store"
+import { makePersistable, stopPersisting, isPersisting } from "mobx-persist-store"
 
 class BookingStore {
 	courseFilter: Model.Booking.CourseFilter = {
@@ -14,11 +14,27 @@ class BookingStore {
 	constructor() {
 		makeAutoObservable(this, {}, { autoBind: true })
 
+		if (typeof window !== "undefined" && !isPersisting(this)) {
+			this.initializePersistence()
+		}
+	}
+	private initializePersistence() {
+		// 先尝试停止之前的持久化
+		try {
+			stopPersisting(this)
+		} catch {
+			console.warn("No previous persistence to stop")
+		}
+
+		// 初始化新的持久化
 		makePersistable(this, {
 			name: "BookingStore",
 			properties: ["courseFilter"],
-			storage: typeof window !== "undefined" ? window.sessionStorage : undefined,
+			storage: window.sessionStorage,
 		})
+	}
+	cleanup() {
+		stopPersisting(this)
 	}
 
 	setCourseFilter<K extends keyof Model.Booking.CourseFilter>(

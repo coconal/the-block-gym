@@ -16,9 +16,9 @@ axiosInstance.interceptors.response.use(
 			originalRequest._retry = true
 			try {
 				// 请求刷新 Token 接口（假设路径为 /auth/refresh）
-				await axiosInstance.post("/auth/refresh")
-				// 刷新成功后重新发送原请求
-				return axiosInstance(originalRequest)
+				// await axiosInstance.post("/auth/refresh")
+				// // 刷新成功后重新发送原请求
+				// return axiosInstance(originalRequest)
 			} catch (refreshError) {
 				// 刷新失败，可在这里跳转到登录页面或者其他处理
 				return Promise.reject(refreshError)

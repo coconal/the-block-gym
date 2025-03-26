@@ -103,11 +103,57 @@ export const login = async (req, res) => {
 			httpOnly: true,
 			maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
 			sameSite: "Strict", // 防止 CSRF
-			// secure: true,
+			secure: process.env.NODE_ENV === "production",
 		})
 		res.status(200).json({ message: "Login successful", nonce })
 	} catch (error) {
 		console.error("Login error:", error)
 		res.status(500).json({ error: "Internal server error" })
+	}
+}
+
+export const logout = (req, res) => {
+	try {
+		// 设置一个已过期的 token
+		res.cookie("jwt", "", {
+			expires: new Date(0),
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "strict",
+		})
+
+		res.status(200).json({
+			success: true,
+			message: "退出登录成功",
+		})
+	} catch (error) {
+		console.error("退出登录失败:", error)
+		res.status(500).json({
+			success: false,
+			message: "服务器内部错误",
+		})
+	}
+}
+
+export const checkToken = (req, res) => {
+	const address = req.user.address
+	try {
+		let token = req.cookies.jwt
+		const { address: tokenAddress } = jwt.decode(token)
+		if (address !== tokenAddress) {
+			return res.status(401).json({
+				success: false,
+				message: "Token 无效",
+			})
+		}
+		res.status(200).json({
+			success: true,
+			message: "Token 有效",
+		})
+	} catch (error) {
+		res.status(500).json({
+			error: "Internal server error",
+		})
+		console.log(error)
 	}
 }

@@ -14,6 +14,9 @@ import { Button, Modal } from "antd"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
+import { useMutation, QueryClient } from "@tanstack/react-query"
+import { logout } from "@/app/_requestAPI/API/user"
+import toast from "react-hot-toast"
 
 interface ILayoutProps {
 	collapsed: boolean
@@ -31,14 +34,29 @@ export default function LayoutSider(props: ILayoutProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const { collapsed } = props
 	const pathname = usePathname()
-	const handleLogout = () => {
-		setIsModalOpen(true)
-	}
+	const queryClient = new QueryClient()
 	const handleCancel = () => {
 		setIsModalOpen(false)
 	}
 
-	const handleOk = () => {}
+	const mutate = useMutation({
+		mutationFn: async () => {
+			const { data } = await logout()
+			return data
+		},
+		onSuccess: (data) => {
+			if (data.success) {
+				toast.success(data.message)
+			} else {
+				toast.error(data.message)
+			}
+			queryClient.invalidateQueries({ queryKey: ["checkUserAuth"] })
+		},
+		onError: (error) => {
+			toast.error(error.message)
+			console.error(error)
+		},
+	})
 
 	return (
 		<div
@@ -101,10 +119,11 @@ export default function LayoutSider(props: ILayoutProps) {
 				<Modal
 					title="确认退出"
 					open={isModalOpen}
-					onOk={handleOk}
+					onOk={() => mutate.mutate()}
 					onCancel={handleCancel}
 					okText="确认"
 					cancelText="取消"
+					loading={mutate.isPending}
 				>
 					<p>确定要退出登录吗？</p>
 				</Modal>
