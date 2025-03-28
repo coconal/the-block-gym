@@ -20,9 +20,11 @@ export default function SettingPageComponent() {
 	const queryClient = useQueryClient()
 	const handleSubmit = async (values: FormValues) => {
 		const formData = new FormData()
-
+		console.log(values)
+		if (values.avatar) {
+			formData.append("avatar", values.avatar)
+		}
 		formData.append("username", values.username)
-		formData.append("avatar", values.avatar)
 		try {
 			const { data } = await updateMe(formData)
 			return data
@@ -74,7 +76,7 @@ export default function SettingPageComponent() {
 						}}
 						onFinish={mutate.mutate}
 					>
-						<Form.Item name="avatar">
+						<Form.Item name="avatar" getValueFromEvent={() => undefined}>
 							<div className="formItem">
 								<div className="text">头像</div>
 								<div
@@ -132,17 +134,15 @@ export default function SettingPageComponent() {
 											toast.error("头像上传失败")
 											onError?.(new Error("上传失败"))
 											console.error("上传错误:", error)
+											// form.setFieldValue("avatar", userData?.userimgae || "")
 										}
 									}}
 									onChange={(info) => {
 										if (info.file.status === "done") {
 											// const avatarUrl = info.file.response.url
 											// form.setFieldValue("avatar", avatarUrl)
-										} else if (info.file.status === "error") {
-											toast.error("头像上传失败，请重试")
 										}
 									}}
-									name="avatar"
 									className="upload-button"
 								>
 									<Button icon={<UploadOutlined />} disabled={mutate.isPending}>
