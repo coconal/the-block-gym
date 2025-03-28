@@ -2,7 +2,7 @@ import axios from "axios"
 
 // 创建 Axios 实例，并确保携带 Cookie
 const axiosInstance = axios.create({
-	baseURL: "http://localhost:3002/api/",
+	baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 	withCredentials: true, // 自动携带 HTTP Only Cookie
 	headers: { "Content-Type": "application/json" },
 	timeout: 30000, // 设置请求超时时间为 30 秒

@@ -24,3 +24,19 @@ export async function checkUserAuth() {
 	const res = await axiosInstance.get<API.User.checkAuthResponse>("/user/checkAuth")
 	return res
 }
+
+export const getUserRole = async () => {
+	const res = await axiosInstance.get<API.User.userRoleResponse>("/user/getMe")
+	return res
+}
+
+export const updateMe = async (params: FormData) => {
+	const res = await axiosInstance.post<API.User.userRoleResponse>(
+		"/user/updateProfile",
+		params
+		// {
+		// 	headers: { "Content-Type": "multipart/form-data" },
+		// }
+	)
+	return res
+}

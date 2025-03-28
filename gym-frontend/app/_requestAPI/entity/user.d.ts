@@ -44,6 +44,17 @@ declare global {
 				success: boolean
 				message: string
 			}
+			declare type userRoleResponse = {
+				message: string
+				data: UserEntity
+			}
+			declare type updateUserRoleParams = {
+				username: string
+				avatar: string
+			}
+			declare type updateUserRoleResponse = {
+				message: string
+			}
 		}
 	}
 }

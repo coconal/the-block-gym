@@ -1,12 +1,12 @@
 "use client"
 
 import "./index.scss"
-import { Calendar, Card, Tag, Button } from "antd"
+import { Calendar, Card, Tag, Button, Empty } from "antd"
 import type { Dayjs } from "dayjs"
 import { useMemo, useState } from "react"
 import dayjs from "dayjs"
 
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { getUserMembership } from "@/app/_requestAPI/API/membership"
 import { addCompletedDay, getSchedule } from "@/app/_requestAPI/API/schedule"
 import DataLoading from "../Loading/DataLoading"
@@ -23,17 +23,19 @@ interface ScheduleItem {
 }
 
 const SchedulePageComponent = () => {
-	const queryClient = new QueryClient()
+	const queryClient = useQueryClient()
 	const { data, isPending } = useQuery({
 		queryFn: async () => {
 			const { data } = await getUserMembership()
+			if (data.data.length === 0) return null
 			const { data: schedule } = await getSchedule({
-				courseId: data.data[0].courseId,
+				courseId: data?.data[0]?.courseId,
 			})
 			return schedule.data
 		},
 		queryKey: ["getUserMembership"],
 	})
+
 	const scheduleItems = useMemo(() => {
 		return data?.planInfo?.plan || []
 	}, [data?.planInfo?.plan])
@@ -88,7 +90,31 @@ const SchedulePageComponent = () => {
 	if (isPending) {
 		return <DataLoading />
 	}
-
+	if (!data)
+		return (
+			<div
+				style={{
+					display: "flex",
+					width: "100",
+					justifyContent: "center",
+					gap: "2rem",
+					alignItems: "center",
+					flexDirection: "column",
+				}}
+			>
+				<h1
+					style={{
+						color: "bisque",
+					}}
+				>
+					😕 没有可用课程
+				</h1>
+				<Empty />
+				<Button type="primary" href="/dashboard/booking">
+					Create Now
+				</Button>
+			</div>
+		)
 	return (
 		<div style={{ padding: "4px" }}>
 			<div style={{ display: "flex", gap: "24px" }}>

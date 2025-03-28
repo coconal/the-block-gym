@@ -3,7 +3,6 @@ import Schedule from "../model/scheduleModel.js"
 
 export const getCourseSchedule = async (req, res) => {
 	const { courseId } = req.query
-
 	try {
 		const courseSchedule = await Schedule.findOne({ courseId })
 

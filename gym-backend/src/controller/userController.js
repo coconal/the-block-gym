@@ -25,19 +25,25 @@ export const getNonce = async (req, res) => {
 
 export const getUser = async (req, res) => {
 	try {
-		const user = req.user
+		const address = req.user.address
 
-		// const result = await contract.read.getUser([useraddress])
-		const data = {
-			id: user._id,
-			address: user.address,
-			role: user.role,
-			verifiedHash: user.verifiedHash,
-			// registrationDate: user.registrationDate,
+		const data = await User.findOne({ address })
+
+		if (!data) {
+			res.status(404).json({
+				data: {},
+				message: "user not found",
+			})
 		}
-
 		res.status(200).json({
-			data,
+			data: {
+				address: data.address,
+				username: data.username,
+				role: data.role,
+				verifiedHash: data.verifiedHash,
+				userimgae: data.userimgae,
+			},
+			message: "find user successfully",
 		})
 	} catch (error) {
 		console.error("Get User error:", error)
@@ -252,5 +258,53 @@ async function refundETH(toAddress, amount, txHash) {
 	} catch (error) {
 		console.error("Refund failed:", error.message)
 		throw error
+	}
+}
+
+export const updateProfile = async (req, res) => {
+	const address = req.user.address
+	const { username, avatar } = req.body
+	console.log(req.body)
+
+	try {
+		const updates = {}
+		if (avatar) {
+			updates.userimgae = avatar
+		}
+
+		// 如果有username才更新
+		if (username) {
+			updates.username = username
+		}
+		const user = await User.findOneAndUpdate({ address }, { $set: updates }, { new: true })
+		res.status(200).json({
+			data: user,
+			message: "update successfully",
+		})
+	} catch (e) {
+		res.status(500).json({ error: "上传图片失败" })
+		console.error(e)
+	}
+}
+
+export const uploadAvatar = async (req, res) => {
+	try {
+		// Multer 解析后的文件对象存放在 req.file
+		if (!req.file) {
+			return res.status(400).json({ error: "请上传图片文件" })
+		}
+
+		// 注意：根据 multer-aliyun-oss 的实现，req.file 应该包含上传后的 OSS 文件信息，
+		const avatarUrl = req.file.url || req.file.Location || ""
+
+		if (!avatarUrl) {
+			return res.status(500).json({ error: "无法获取上传图片的地址" })
+		}
+
+		// 返回图片 URL 给前端
+		res.status(200).json({ url: avatarUrl })
+	} catch (error) {
+		console.error("上传头像失败：", error)
+		res.status(500).json({ error: "上传头像失败" })
 	}
 }

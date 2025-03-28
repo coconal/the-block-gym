@@ -1,6 +1,6 @@
 "use client"
 
-import { useMutation, QueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Alert, AlertProps, Button, Snackbar, SnackbarOrigin } from "@mui/material"
 import { Flex } from "antd"
 import { useState } from "react"
@@ -27,7 +27,7 @@ export default function LoginForm() {
 		open: false,
 		message: "",
 	})
-	const queryClient = new QueryClient()
+	const queryClient = useQueryClient()
 	const { open } = state
 	const { address, isConnected } = useAccount()
 	const { signMessageAsync } = useSignMessage()

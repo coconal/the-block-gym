@@ -1,3 +1,9 @@
+import SettingPageComponent from "@/app/_components/SettingPageComponent"
+
 export default function SettingsPage() {
-	return <div></div>
+	return (
+		<div>
+			<SettingPageComponent />
+		</div>
+	)
 }
