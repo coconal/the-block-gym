@@ -4,7 +4,7 @@ import "./index.scss"
 
 import { useMutation } from "@tanstack/react-query"
 import { useAccount } from "wagmi"
-import { Button, Checkbox, Form, Input, Select } from "antd"
+import { Button, Form, Input, Select } from "antd"
 import toast from "react-hot-toast"
 
 const { Option } = Select

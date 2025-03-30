@@ -1,8 +1,5 @@
 import { Card, Col, Flex, Row } from "antd"
 import img1 from "@/public/about1.png"
-import coach1 from "@/public/coach1.png"
-import coach2 from "@/public/coach2.png"
-import coach3 from "@/public/coach3.png"
 import React from "react"
 
 import "./index.scss"

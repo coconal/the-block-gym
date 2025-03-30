@@ -92,6 +92,8 @@ export default function SettingPageComponent() {
 									)}
 								</div>
 								<Upload
+									maxCount={1}
+									multiple={false}
 									beforeUpload={(file) => {
 										// 限制文件大小为1MB
 										const isLt1M = file.size / 1024 / 1024 < 1

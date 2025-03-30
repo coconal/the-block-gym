@@ -8,8 +8,9 @@ import InboxIcon from "@mui/icons-material/Inbox"
 import SettingsIcon from "@mui/icons-material/Settings"
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"
 import CheckIcon from "@mui/icons-material/Check"
-import RequestQuoteIcon from "@mui/icons-material/RequestQuote"
+import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined"
 import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded"
+import BarChartIcon from "@mui/icons-material/BarChart"
 import { Button, Modal, Skeleton } from "antd"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -23,11 +24,11 @@ interface ILayoutProps {
 	collapsed: boolean
 }
 const data = [
-	// { name: "General", icon: <SummarizeIcon /> },
+	{ name: "General", icon: <BarChartIcon />, role: "admin" },
 	{ name: "Booking", icon: <InboxIcon />, role: "user" },
 	{ name: "Check", icon: <CheckIcon />, role: "user" },
 	{ name: "Schedule", icon: <CalendarMonthIcon />, role: "user" },
-	{ name: "membership", icon: <RequestQuoteIcon />, role: "user" },
+	{ name: "ManageCourse", icon: <ClassOutlinedIcon />, role: "user" },
 	{ name: "ManageUser", icon: <ManageAccountsRoundedIcon />, role: "admin" },
 	{ name: "Settings", icon: <SettingsIcon />, role: "user" },
 ]
