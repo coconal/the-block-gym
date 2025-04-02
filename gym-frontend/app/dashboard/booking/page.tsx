@@ -5,7 +5,7 @@ import DataLoading from "@/app/_components/Loading/DataLoading"
 import { getAllCourses } from "@/app/_requestAPI/API/courses"
 import { useStore } from "@/app/_store"
 import { useQuery } from "@tanstack/react-query"
-import { Empty, List, Card, Space, Input, Select, Switch } from "antd"
+import { Empty, List, Card, Space, Input, Select, Switch, Tag } from "antd"
 import { toJS } from "mobx"
 import { observer } from "mobx-react-lite"
 
@@ -38,6 +38,15 @@ const BookingPage = observer(() => {
 						padding: "8px",
 					}}
 				>
+					<Tag
+						color="red"
+						style={{
+							marginBottom: "10px",
+							fontSize: "14px",
+						}}
+					>
+						提醒：七天内不接受退款，谨慎购买！！！
+					</Tag>
 					<Space direction="vertical" style={{ width: "100%" }}>
 						<Input.Search
 							placeholder="搜索教练钱包地址 基础课程勿填"

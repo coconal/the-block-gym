@@ -8,7 +8,7 @@ interface Params {
 export default function LinkButton({ href }: Params) {
 	return (
 		<Link href={href} className="link-button">
-			Explore More
+			探索更多
 		</Link>
 	)
 }

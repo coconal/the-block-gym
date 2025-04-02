@@ -19,18 +19,24 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { logout } from "@/app/_requestAPI/API/user"
 import toast from "react-hot-toast"
 import { useGetUser } from "@/app/hooks/useGetUser"
+import UserType from "./UserType"
 
 interface ILayoutProps {
 	collapsed: boolean
 }
 const data = [
-	{ name: "General", icon: <BarChartIcon />, role: "admin" },
-	{ name: "Booking", icon: <InboxIcon />, role: "user" },
-	{ name: "Check", icon: <CheckIcon />, role: "user" },
-	{ name: "Schedule", icon: <CalendarMonthIcon />, role: "user" },
-	{ name: "ManageCourse", icon: <ClassOutlinedIcon />, role: "user" },
-	{ name: "ManageUser", icon: <ManageAccountsRoundedIcon />, role: "admin" },
-	{ name: "Settings", icon: <SettingsIcon />, role: "user" },
+	{ name: "General", zh: "总体情况", icon: <BarChartIcon />, role: ["admin"] },
+	{ name: "Booking", zh: "预定", icon: <InboxIcon />, role: ["user"] },
+	{ name: "Check", zh: "查看", icon: <CheckIcon />, role: ["user", "coach"] },
+	{ name: "Schedule", zh: "日程规划", icon: <CalendarMonthIcon />, role: ["user", "coach"] },
+	{
+		name: "ManageCourse",
+		zh: "管理课程",
+		icon: <ClassOutlinedIcon />,
+		role: ["user", "admin", "coach"],
+	},
+	{ name: "ManageUser", zh: "管理用户", icon: <ManageAccountsRoundedIcon />, role: ["admin"] },
+	{ name: "Settings", zh: "设置", icon: <SettingsIcon />, role: ["user", "admin", "coach"] },
 ]
 export default function LayoutSider(props: ILayoutProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false)
@@ -53,7 +59,9 @@ export default function LayoutSider(props: ILayoutProps) {
 			} else {
 				toast.error(data.message)
 			}
-			queryClient.invalidateQueries({ queryKey: ["checkUserAuth", "userRole"] })
+			handleCancel()
+			queryClient.invalidateQueries({ queryKey: ["checkUserAuth"] })
+			queryClient.invalidateQueries({ queryKey: ["userRole"] })
 		},
 		onError: (error) => {
 			toast.error(error.message)
@@ -77,10 +85,11 @@ export default function LayoutSider(props: ILayoutProps) {
 				<Skeleton />
 			) : (
 				<>
+					<UserType isOpen={collapsed} />
 					<div className="custom-tab">
 						{data.map((item) => {
 							const isActive = pathname?.startsWith(`/dashboard/${item.name.toLowerCase()}`)
-							return roleData === item.role ? (
+							return item.role.includes(roleData || "user") ? (
 								<Link
 									key={item.name}
 									href={`/dashboard/${item.name.toLowerCase()}`}
@@ -90,7 +99,7 @@ export default function LayoutSider(props: ILayoutProps) {
 										<div className="custom-tab-icon">{item.icon}</div>
 
 										<span className={`custom-tab-text ${collapsed ? "collapsed" : ""}`} style={{}}>
-											{item.name}
+											{item.zh}
 										</span>
 									</div>
 								</Link>
@@ -122,7 +131,7 @@ export default function LayoutSider(props: ILayoutProps) {
 									transition: "opacity 0.5s ease",
 								}}
 							>
-								{"Logout"}
+								{"登出"}
 							</span>
 						</Button>
 						<Modal

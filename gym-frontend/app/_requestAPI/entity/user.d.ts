@@ -42,6 +42,7 @@ declare global {
 			}
 			declare type checkAuthResponse = {
 				success: boolean
+				role: "user" | "coach" | "admin" | ""
 				message: string
 			}
 			declare type userRoleResponse = {
@@ -54,6 +55,28 @@ declare global {
 			}
 			declare type updateUserRoleResponse = {
 				message: string
+			}
+			declare type GetUserByNameParams = {
+				likename: string
+			}
+			declare type GetUserByNameResponse = {
+				data: UserEntity[]
+				message: string
+			}
+			declare type TransferMembershipParams = {
+				index: number
+				toAddress: string
+				verifiedHash: string
+			}
+			declare type TransferMembershipResponse = {
+				data: string
+			}
+			declare type RequestMembershipParams = {
+				index: number
+				requestHash: string
+			}
+			declare type RequestMembershipResponse = {
+				data: string
 			}
 		}
 	}

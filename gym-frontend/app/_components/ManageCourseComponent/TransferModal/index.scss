@@ -1,0 +1,15 @@
+.transfer-modal-listitem {
+	background-color: #ffffffc3;
+	transition: background-color 0.3s ease;
+
+	&:hover {
+		background-color: #c0c0c0;
+	}
+}
+.transfer-current-user {
+	margin-top: 12px;
+	margin-bottom: 12px;
+	padding: 12px;
+	border-radius: 12px;
+	background-color: #33333323;
+}

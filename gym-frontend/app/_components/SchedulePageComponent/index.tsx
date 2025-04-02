@@ -7,10 +7,10 @@ import { useMemo, useState } from "react"
 import dayjs from "dayjs"
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { getUserMembership } from "@/app/_requestAPI/API/membership"
 import { addCompletedDay, getSchedule } from "@/app/_requestAPI/API/schedule"
 import DataLoading from "../Loading/DataLoading"
 import toast from "react-hot-toast"
+import { useMembership } from "@/app/hooks/useUserMembership"
 
 interface ScheduleItem {
 	id: string
@@ -24,16 +24,16 @@ interface ScheduleItem {
 
 const SchedulePageComponent = () => {
 	const queryClient = useQueryClient()
+	const { data: membershipData, isPending: isMembershipPending } = useMembership()
 	const { data, isPending } = useQuery({
 		queryFn: async () => {
-			const { data } = await getUserMembership()
-			if (data.data.length === 0) return null
+			if (membershipData?.length === 0) return null
 			const { data: schedule } = await getSchedule({
-				courseId: data?.data[0]?.courseId,
+				courseId: membershipData?.[0].courseId as string,
 			})
 			return schedule.data
 		},
-		queryKey: ["getUserMembership"],
+		queryKey: ["getUserSchedule"],
 	})
 
 	const scheduleItems = useMemo(() => {
@@ -76,6 +76,7 @@ const SchedulePageComponent = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({ queryKey: ["getUserMembership"] })
+			queryClient.invalidateQueries({ queryKey: ["getUserSchedule"] })
 			toast.success(data.message)
 		},
 		onError: (error) => {
@@ -87,7 +88,7 @@ const SchedulePageComponent = () => {
 	const completed = useMemo(() => {
 		return data?.completed || []
 	}, [data?.completed])
-	if (isPending) {
+	if (isPending || isMembershipPending) {
 		return <DataLoading />
 	}
 	if (!data)

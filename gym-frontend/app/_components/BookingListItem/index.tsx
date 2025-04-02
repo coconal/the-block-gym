@@ -5,7 +5,7 @@ import { blo } from "blo"
 import { WarningFilled } from "@ant-design/icons"
 import BookingCourseModal from "../BookingCourseModal"
 import { useState } from "react"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import toast from "react-hot-toast"
 import { checkUserHaveCourse, purchaseCourse } from "@/app/_requestAPI/API/user"
 import { useSendTransaction } from "wagmi"
@@ -23,6 +23,7 @@ interface ApiError extends Error {
 }
 export default function BookingListItem(props: IBookingListItem) {
 	const { sendTransactionAsync } = useSendTransaction()
+	const queryClient = useQueryClient()
 	const { item, index } = props
 
 	const [open, setOpen] = useState(false)
@@ -48,6 +49,7 @@ export default function BookingListItem(props: IBookingListItem) {
 		},
 		onSuccess: (data) => {
 			setOpen(false)
+
 			if (data.message === "repeat") {
 				toast.error("There are courses that have not expired", {
 					icon: <WarningFilled />,
@@ -58,6 +60,8 @@ export default function BookingListItem(props: IBookingListItem) {
 				})
 				return
 			}
+			queryClient.invalidateQueries({ queryKey: ["memberships"] })
+			queryClient.invalidateQueries({ queryKey: ["getUserSchedule"] })
 			toast.success(data.message, {
 				duration: 5000,
 			})

@@ -43,7 +43,7 @@ export default function About() {
 				</Col>
 			</Row>
 			<Flex align="center" vertical gap={48}>
-				<h1 style={{ fontSize: "48px", color: "#ead5b9" }}>Coach Profile</h1>
+				<h1 style={{ fontSize: "48px", color: "#ead5b9" }}>教练信息</h1>
 				<Flex gap={30}>
 					<Card
 						hoverable
@@ -58,7 +58,7 @@ export default function About() {
 							/>
 						}
 					>
-						<Meta title="GUYS" description="" />
+						<Meta title="格斯" description="" />
 					</Card>
 					<Card
 						hoverable
@@ -73,7 +73,7 @@ export default function About() {
 							/>
 						}
 					>
-						<Meta title="Jotaro Kujo" description="" />
+						<Meta title="空条承太郎" description="" />
 					</Card>
 					<Card
 						hoverable
@@ -88,7 +88,7 @@ export default function About() {
 							/>
 						}
 					>
-						<Meta title="Leon" description="" />
+						<Meta title="里昂" description="" />
 					</Card>
 					<Link href="/dashboard">
 						<Card hoverable style={{ width: "100px", height: "100%" }}>

@@ -20,8 +20,12 @@ export async function logout() {
 	return res
 }
 
-export async function checkUserAuth() {
-	const res = await axiosInstance.get<API.User.checkAuthResponse>("/user/checkAuth")
+export async function checkUserAuth(address: string) {
+	const res = await axiosInstance.get<API.User.checkAuthResponse>("/user/checkAuth", {
+		params: {
+			checkAddress: address,
+		},
+	})
 	return res
 }
 
@@ -38,5 +42,28 @@ export const updateMe = async (params: FormData) => {
 		// 	headers: { "Content-Type": "multipart/form-data" },
 		// }
 	)
+	return res
+}
+
+export const getUserByName = async (params: API.User.GetUserByNameParams) => {
+	const res = await axiosInstance.post<API.User.GetUserByNameResponse>(
+		`/user/findUserByName?likename=${params.likename}`
+	)
+	return res
+}
+
+export const transferMembership = async (params: API.User.TransferMembershipParams) => {
+	const res = await axiosInstance.post<API.User.TransferMembershipResponse>(
+		`/user/transferMembership`,
+		params
+	)
+	return res
+}
+
+export const requestMembership = async (params: API.User.RequestMembershipParams) => {
+	const res = await axiosInstance.post<API.User.RequestMembershipResponse>(
+		`/user/requestMembership`,
+		params
+	) // ignore_security_alert_wait_for_fix SSRF
 	return res
 }

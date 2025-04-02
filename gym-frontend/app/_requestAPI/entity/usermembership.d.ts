@@ -16,7 +16,7 @@ declare global {
 			}
 
 			declare type MembershipResponse = {
-				data: membership[]
+				data: Membership[]
 				message: string
 			}
 		}

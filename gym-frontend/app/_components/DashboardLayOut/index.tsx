@@ -20,7 +20,6 @@ export default function DashboardLayOut({ children }: IDashboardLayOut) {
 	const {
 		token: { colorBgContainer, borderRadiusLG },
 	} = theme.useToken()
-
 	return (
 		<div
 			style={{
@@ -50,7 +49,14 @@ export default function DashboardLayOut({ children }: IDashboardLayOut) {
 								background: "transparent",
 							}}
 						>
-							<div style={{ display: "flex", alignItems: "center", gap: "1rem", width: "100%" }}>
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									gap: "1rem",
+									width: "100%",
+								}}
+							>
 								<Button
 									type="text"
 									icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -64,7 +70,6 @@ export default function DashboardLayOut({ children }: IDashboardLayOut) {
 									}}
 								/>
 								<LayoutContentHeader />
-								{/* <LayoutContentHeaderNav type={selectedIndex} /> */}
 							</div>
 						</div>
 					</Header>

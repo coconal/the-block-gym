@@ -12,13 +12,13 @@ export default function HeaderNav() {
 	return (
 		<Flex gap={34} align="center" justify="space-between" className="flex-nav">
 			<Link rel="preload" href="/about" className={active === "about" ? "active" : ""}>
-				<h2>About</h2>
+				<h2>关于</h2>
 			</Link>
 			<Link rel="preload" href="/location" className={active === "location" ? "active" : ""}>
-				<h2>Location</h2>
+				<h2>地址</h2>
 			</Link>
 			<Link rel="preload" href="/dashboard" className={active === "dashboard" ? "active" : ""}>
-				<h2>Course</h2>
+				<h2>课程</h2>
 			</Link>
 
 			<ConnectButton

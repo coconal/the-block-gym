@@ -38,6 +38,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/amap-js-api": "^1.4.16",
+    "@types/lodash": "^4.17.16",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

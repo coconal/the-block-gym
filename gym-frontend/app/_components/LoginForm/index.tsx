@@ -102,6 +102,7 @@ export default function LoginForm() {
 				toast.success("login successfully", { duration: 2000 })
 			}
 			queryClient.invalidateQueries({ queryKey: ["checkUserAuth"] })
+			queryClient.invalidateQueries({ queryKey: ["userRole"] })
 		},
 		onError: (err: Error) => {
 			toast.error("login failed: " + err.message, { duration: 5000 })
