@@ -61,6 +61,11 @@ async function resetNetwork() {
 }
 async function setTime(targetDate) {
 	const timestamp = Math.floor(new Date(targetDate).getTime() / 1000)
+	if (isNaN(timestamp)) {
+		throw new Error(
+			`Invalid date format: ${targetDate}. Use ISO format (e.g. "2025-03-15T00:00:00Z")`
+		)
+	}
 	// 获取当前区块时间
 	const currentBlock = await ethers.provider.getBlock("latest")
 
@@ -128,7 +133,7 @@ async function main() {
 			.purchaseMembership(
 				i === 0 ? "0x0000000000000000000000000000000000000000" : coach.address,
 				users[0].address,
-				courses[i].duration,
+				courses[i].duration * 24 * 60 * 60,
 				hash.hash,
 				ethers.parseEther(courses[i].price.toString())
 			)
@@ -147,8 +152,34 @@ async function main() {
 	}
 	// const membershipData = await membership.getMembership(users[0].address)
 	// console.log("用户会员信息:", membershipData)
+	await setTime("2025-03-15T00:00:00Z")
+	const recipt = await users[0].sendTransaction({
+		to: membership.target,
+		value: ethers.parseEther("0.15"),
+	})
+	const tx = await membership
+		.connect(admin)
+		.purchaseMembership(
+			"0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+			users[0].address,
+			180 * 24 * 60 * 60,
+			recipt.hash,
+			ethers.parseEther("0.15")
+		)
 	// 恢复为当前时间
-	await setCurrentTime()
+	console.log("购买目前一个会员")
+	// 会员过期时间
+	const membershipData = await membership.memberships(users[0].address, 5)
+	console.log(membershipData.startTime, membershipData.duration)
+
+	console.log(
+		"过期时间：",
+		new Date(
+			(Number(membershipData.startTime) + Number(membershipData.duration) * 24 * 60 * 60) * 1000
+		).toLocaleString()
+	)
+
+	currentTimestamp = await setCurrentTime()
 	const nowblock = await ethers.provider.getBlock("latest")
 	console.log("当前时间:", new Date(nowblock.timestamp * 1000).toLocaleString())
 }

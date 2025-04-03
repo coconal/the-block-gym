@@ -92,9 +92,9 @@ export const login = async (req, res) => {
 			return res.status(401).json({ error: "Invalid signature" })
 		}
 
-		// // 登录成功后更新 nonce
-		// const newNonce = Math.floor(Math.random() * 1000000)
-		// await User.findByIdAndUpdate(user._id, { nonce: newNonce })
+		// 登录成功后更新 nonce
+		const newNonce = Math.floor(Math.random() * 1000000)
+		await User.findByIdAndUpdate(user._id, { nonce: newNonce })
 		// 签发 JWT
 		const token = jwt.sign({ id: user._id, address }, process.env.JWT_SECRET, {
 			expiresIn: "30d",
@@ -135,8 +135,12 @@ export const logout = (req, res) => {
 	}
 }
 
-export const checkToken = (req, res) => {
+export const checkToken = async (req, res) => {
+	const { checkAddress } = req.query
 	const address = req.user.address
+	if (checkAddress && checkAddress !== address) {
+		return res.status(401).json({ success: false, message: "Token 无效" })
+	}
 	try {
 		let token = req.cookies.jwt
 		const { address: tokenAddress } = jwt.decode(token)
@@ -146,8 +150,10 @@ export const checkToken = (req, res) => {
 				message: "Token 无效",
 			})
 		}
+		const user = await User.findOne({ address })
 		res.status(200).json({
 			success: true,
+			role: user.role,
 			message: "Token 有效",
 		})
 	} catch (error) {

@@ -18,6 +18,20 @@ declare global {
 			declare type CourseListResponse = {
 				courses: CourseEntity[]
 			}
+
+			declare type CourseUpdateParams = {
+				coursetype: string
+				description: string
+				coachAddress: string
+				coachimageurl: string
+				price: number
+				duration: number
+				discount: number
+			}
+
+			declare type ActionResponse = {
+				message: string
+			}
 		}
 	}
 }

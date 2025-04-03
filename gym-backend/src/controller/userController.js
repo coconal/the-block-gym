@@ -1,8 +1,10 @@
 import User from "../model/userModel.js"
+import Schedule from "../model/scheduleModel.js"
+import CoursePlan from "../model/coursePlanModel.js"
 import { contract, publicClient } from "../utils/share.js"
 import { JSONbig } from "../utils/share.js"
 import Course from "../model/coursesModel.js"
-import { getAddress, parseEther } from "viem"
+import { parseEther } from "viem"
 import UserMembership from "../model/userMembershipModel.js"
 
 export const getNonce = async (req, res) => {
@@ -177,23 +179,32 @@ export const purchaseMembership = async (req, res) => {
 			data: result,
 			message: "Purchase successful",
 		})
+		try {
+			const user = await User.findOne({ address: useraddress })
+			// 创建用户会员记录
+			const chainMemberships = await contract.read.getMembership([useraddress])
+			const index = chainMemberships.length === 0 ? 0 : chainMemberships.length
+			const test = await UserMembership.create({
+				userId: user._id,
+				courseId: id,
+				// 存在时间差距
+				index: index - 1,
+				expireAt: new Date(
+					Number(chainMemberships[index - 1].startTime) * 1000 + durationtime * 1000
+				),
+				isActive: true,
+				coursepurchasedhash: result,
+			})
 
-		const user = await User.findOne({ address: useraddress })
-		// 创建用户会员记录
-		const chainMemberships = await contract.read.getMembership([useraddress])
-		const index = chainMemberships.length === 0 ? 0 : chainMemberships.length
-		const test = await UserMembership.create({
-			userId: user._id,
-			courseId: id,
-			// 存在时间差距
-			index: index - 1,
-			expireAt: new Date(
-				Number(chainMemberships[index - 1].startTime) * 1000 + durationtime * 1000
-			),
-			isActive: true,
-			coursepurchasedhash: result,
-		})
-		console.log(test)
+			const plan = await CoursePlan.findOne({ courseType: course.coursetype })
+
+			const schedule = await Schedule.create({
+				courseId: id,
+				planId: plan._id,
+			})
+		} catch (e) {
+			console.log(e.message)
+		}
 	} catch (error) {
 		console.log(error.message)
 	}
@@ -306,5 +317,111 @@ export const uploadAvatar = async (req, res) => {
 	} catch (error) {
 		console.error("上传头像失败：", error)
 		res.status(500).json({ error: "上传头像失败" })
+	}
+}
+
+export const findUserByName = async (req, res) => {
+	const { likename } = req.query
+
+	try {
+		if (!likename) {
+			const users = await User.find({})
+			return res.status(200).json({ data: users, message: "Find user successfully" })
+		} else {
+			const users = await User.find({ username: { $regex: new RegExp(likename, "i") } })
+			res.status(200).json({ data: users, message: "Find user successfully" })
+		}
+	} catch (error) {
+		console.error("Find User error:", error.message)
+		res.status(500).json({ error: "Internal server error" })
+	}
+}
+
+export const transferMembership = async (req, res) => {
+	const { index, toAddress, verifiedHash } = req.body
+	const useraddress = req.user.address
+	try {
+		if (!verifiedHash) {
+			return res.status(400).json({ error: "无交易hash" })
+		}
+
+		const receipt = await publicClient.getTransactionReceipt({ hash: verifiedHash })
+		if (!receipt) {
+			return res.status(400).json({ error: "未查到交易hash" })
+		}
+		const { from, to } = receipt
+		if (
+			from.toLowerCase() !== useraddress.toLowerCase() &&
+			to.toLocaleLowerCase !== toAddress.toLocaleLowerCase()
+		) {
+			return res.status(400).json({ error: "交易发起账户与当前账户不匹配" })
+		}
+		const user = await User.findOne({ address: useraddress })
+		const touser = await User.findOne({ address: toAddress })
+		const course = await UserMembership.findOne({
+			userId: user._id,
+			index: index,
+		})
+		await course.updateOne({
+			$push: {
+				releaseHashs: verifiedHash,
+			},
+		})
+		if (!course) {
+			return res.status(400).json({ error: "未查到课程" })
+		}
+		const chainMemberships = await contract.read.getMembership([toAddress])
+		const { _id, __v, ...filter } = course.toObject()
+		await UserMembership.create({
+			...filter,
+			verifiedHash,
+			userId: touser._id,
+			index: chainMemberships.length - 1 || 0,
+		})
+		course.isActive = false
+		await course.save()
+		res.status(200).json({ data: "转让成功" })
+	} catch (e) {
+		console.log(e)
+		res.status(400).json({ error: "交易hash校验失败" })
+	}
+}
+
+export const requestMembership = async (req, res) => {
+	const { index, requestHash } = req.body
+	const useraddress = req.user.address
+	try {
+		if (!requestHash) {
+			return res.status(400).json({ error: "无交易hash" })
+		}
+		const user = await User.findOne({ address: useraddress })
+		const course = await UserMembership.findOne({ userId: user._id, index: index })
+		if (!course) {
+			return res.status(400).json({ error: "未查到课程" })
+		}
+		const receipt = await publicClient.getTransactionReceipt({ hash: requestHash })
+		if (!receipt) {
+			return res.status(400).json({ error: "未查到交易hash" })
+		}
+		const { from, to } = receipt || {}
+		if (
+			from.toLowerCase() !== useraddress.toLowerCase() ||
+			to.toLowerCase() !== contract.address.toLowerCase()
+		) {
+			return res.status(400).json({ error: "交易发起账户与当前账户不匹配" })
+		}
+		console.log(requestHash)
+
+		await course.updateOne({
+			$push: {
+				releaseHashs: requestHash,
+			},
+			$set: {
+				isActive: false,
+			},
+		})
+		res.status(200).json({ data: "退款成功" })
+	} catch (e) {
+		console.log(e)
 	}
 }

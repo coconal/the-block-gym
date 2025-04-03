@@ -25,15 +25,15 @@ export default function BookingCourseModal(props: IBookingCourseModalProps) {
 							fontSize: "1.5rem",
 						}}
 					>
-						Course: $$ {item.coursetype} $$
+						课程: $$ {item.coursetype} $$
 					</div>
 				}
 				open={open}
 				onOk={handleOk}
 				confirmLoading={loading}
 				onCancel={handleCancel}
-				okText="Booking"
-				cancelText="Cancel"
+				okText="预定"
+				cancelText="取消"
 				width={"40rem"}
 			>
 				<div className="booking-modal-content">

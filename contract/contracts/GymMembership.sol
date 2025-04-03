@@ -171,23 +171,6 @@ contract GymMembership is ReentrancyGuard, Ownable {
         );
     }
 
-    // // 延长会员有效期
-    // function extendMembership(
-    //     uint256 id,
-    //     address user,
-    //     uint256 extraDuration,
-    //     bytes32 paymentProof,
-    //     uint256 paymentAmount
-    // ) external onlyOwner nonReentrant {
-    //     Membership storage m = memberships[user][id];
-    //     require(m.isActive, "No active membership");
-
-    //     m.totalAmount += paymentAmount;
-    //     m.duration += extraDuration;
-
-    //     emit DurationExtended(user, id, extraDuration, paymentProof);
-    // }
-
     // 转让会员
     function transferMembership(
         uint256 id,
@@ -196,10 +179,10 @@ contract GymMembership is ReentrancyGuard, Ownable {
         require(users[msg.sender].isActive, "Sender inactive");
         require(users[newOwner].isActive, "Recipient inactive");
         require(msg.sender != newOwner, "Cannot transfer to self");
-
         Membership[] storage senderMemberships = memberships[msg.sender];
         require(id < senderMemberships.length, "Invalid membership ID");
         Membership memory transfering = senderMemberships[id];
+        require(transfering.privatecoach != address(0), "No permission");
         require(transfering.isActive, "Membership not active");
 
         (
@@ -211,8 +194,16 @@ contract GymMembership is ReentrancyGuard, Ownable {
         // 更新状态
         senderMemberships[id].releasedAmount += releasable;
 
-        payable(owner()).transfer(platformCut);
-        payable(senderMemberships[id].privatecoach).transfer(coachCut);
+        if (platformCut > 0) {
+            (bool success1, ) = payable(owner()).call{value: platformCut}("");
+            require(success1, "Platform transfer failed");
+        }
+        if (coachCut > 0 && transfering.privatecoach != address(0)) {
+            (bool success2, ) = payable(transfering.privatecoach).call{
+                value: coachCut
+            }("");
+            require(success2, "Coach transfer failed");
+        }
 
         // 创建新会员记录
         memberships[newOwner].push(

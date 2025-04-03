@@ -114,7 +114,7 @@ export default function BookingListItem(props: IBookingListItem) {
 								setOpen(true)
 							}}
 						>
-							{item.coursetype}
+							课程类型：{item.coursetype}
 						</div>
 					}
 					description={
@@ -131,7 +131,7 @@ export default function BookingListItem(props: IBookingListItem) {
 									gap: "0.5rem",
 								}}
 							>
-								<span>coach address: </span>
+								<span>教练地址: </span>
 								<Link
 									className="custom-list-title-hover"
 									style={{
