@@ -38,12 +38,6 @@ describe("GymMembership", function () {
 			expect(Number(registrationDate)).to.be.greaterThan(0)
 			expect(isActive).to.be.true
 		})
-
-		it("Should verify a coach", async function () {
-			let ipfsCertHash = generateTestIPFSHash()
-			await gymMembership.connect(owner).verifiedCoach(coach.address, ipfsCertHash)
-			expect(await gymMembership.verifiedCoaches(coach.address)).to.be.true
-		})
 	})
 
 	describe("Membership Purchase", function () {
@@ -67,33 +61,6 @@ describe("GymMembership", function () {
 			expect(Number(await gymMembership.getMembershipLength(user.address))).to.equal(1)
 		})
 	})
-
-	// describe("Membership Extension", function () {
-	// 	let id
-	// 	let ipfsCertHash = generateTestIPFSHash()
-	// 	beforeEach(async function () {
-	// 		await gymMembership.connect(owner).registerUser(0, user.address)
-	// 		await gymMembership.connect(owner).verifiedCoach(coach.address, ipfsCertHash)
-	// 		await gymMembership
-	// 			.connect(owner)
-	// 			.purchaseMembership(coach.address, user.address, duration, paymentProof, paymentAmount)
-
-	// 		id = (await gymMembership.getMembershipLength(user.address)) - 1n
-	// 	})
-
-	// 	it("Should extend a membership", async function () {
-	// 		let extraDuration = 15 * 24 * 60 * 60 // 15 days
-	// 		await expect(
-	// 			gymMembership
-	// 				.connect(owner)
-	// 				.extendMembership(id, user.address, extraDuration, paymentProof, paymentAmount)
-	// 		)
-	// 			.to.emit(gymMembership, "DurationExtended")
-	// 			.withArgs(user.address, id, extraDuration, paymentProof)
-	// 		const membership = (await gymMembership.getMembership(user.address))[Number(id)]
-	// 		expect(Number(membership.duration)).to.equal(duration + extraDuration)
-	// 	})
-	// })
 
 	describe("Membership Transfer", function () {
 		let id

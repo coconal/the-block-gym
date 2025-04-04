@@ -6,6 +6,7 @@ import { JSONbig } from "../utils/share.js"
 import Course from "../model/coursesModel.js"
 import { parseEther } from "viem"
 import UserMembership from "../model/userMembershipModel.js"
+import Courses from "../model/coursesModel.js"
 
 export const getNonce = async (req, res) => {
 	try {
@@ -43,7 +44,7 @@ export const getUser = async (req, res) => {
 				username: data.username,
 				role: data.role,
 				verifiedHash: data.verifiedHash,
-				userimgae: data.userimgae,
+				userimage: data.userimage,
 			},
 			message: "find user successfully",
 		})
@@ -183,15 +184,13 @@ export const purchaseMembership = async (req, res) => {
 			const user = await User.findOne({ address: useraddress })
 			// 创建用户会员记录
 			const chainMemberships = await contract.read.getMembership([useraddress])
-			const index = chainMemberships.length === 0 ? 0 : chainMemberships.length
+			const index = chainMemberships.length > 0 ? chainMemberships.length - 1 : 0
 			const test = await UserMembership.create({
 				userId: user._id,
 				courseId: id,
 				// 存在时间差距
-				index: index - 1,
-				expireAt: new Date(
-					Number(chainMemberships[index - 1].startTime) * 1000 + durationtime * 1000
-				),
+				index: index,
+				expireAt: new Date(Number(chainMemberships[index].startTime) * 1000 + durationtime * 1000),
 				isActive: true,
 				coursepurchasedhash: result,
 			})
@@ -280,7 +279,7 @@ export const updateProfile = async (req, res) => {
 	try {
 		const updates = {}
 		if (avatar) {
-			updates.userimgae = avatar
+			updates.userimage = avatar
 		}
 
 		// 如果有username才更新
@@ -421,6 +420,53 @@ export const requestMembership = async (req, res) => {
 			},
 		})
 		res.status(200).json({ data: "退款成功" })
+	} catch (e) {
+		console.log(e)
+	}
+}
+
+export const getUserRelease = async (req, res) => {
+	const { address } = req.user
+	try {
+		const courseIds = await Courses.find({ coachAddress: address })
+		const courses = await UserMembership.find({ courseId: { $in: courseIds } })
+		console.log(courses)
+
+		if (!courses) {
+			return res.status(400).json({ data: [] })
+		}
+		res.status(200).json({ data: courses })
+	} catch (e) {
+		console.log(e)
+	}
+}
+
+export const releaseMembership = async (req, res) => {
+	const { courseId, index, verifiedHash } = req.body
+	const useraddress = req.user.address
+	try {
+		if (!verifiedHash) {
+			return res.status(400).json({ error: "无交易hash" })
+		}
+
+		const receipt = await publicClient.getTransactionReceipt({ hash: verifiedHash })
+		if (!receipt) {
+			return res.status(400).json({ error: "未查到交易hash" })
+		}
+		// TODO
+		// 交易接收地址必须是合约地址
+		// 时间
+
+		const membership = await UserMembership.findOne({ courseId, index: index })
+		if (!membership) {
+			return res.status(400).json({ error: "未查到课程" })
+		}
+		await membership.updateOne({
+			$push: {
+				releaseHashs: verifiedHash,
+			},
+		})
+		res.status(200).json({ message: "收取成功" })
 	} catch (e) {
 		console.log(e)
 	}

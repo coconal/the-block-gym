@@ -31,6 +31,10 @@ const userMembershipSchema = new mongoose.Schema({
 		type: [String],
 		default: [],
 	},
+	transfered: {
+		type: Boolean,
+		default: false,
+	},
 })
 userMembershipSchema.set("toJSON", {
 	virtuals: true,
@@ -43,11 +47,20 @@ userMembershipSchema.virtual("courseInfo", {
 	foreignField: "_id",
 	justOne: true,
 })
+userMembershipSchema.virtual("userInfo", {
+	ref: "users",
+	localField: "userId",
+	foreignField: "_id",
+})
 
 userMembershipSchema.pre(/^find/, function (next) {
 	this.populate({
 		path: "courseInfo",
 		select: "-_id -__v",
+	})
+	this.populate({
+		path: "userInfo",
+		select: "address",
 	})
 
 	next()

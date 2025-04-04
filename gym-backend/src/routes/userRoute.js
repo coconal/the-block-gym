@@ -7,7 +7,9 @@ import {
 	getMembershipActive,
 	getUser,
 	getUserAllMembership,
+	getUserRelease,
 	purchaseMembership,
+	releaseMembership,
 	requestMembership,
 	transferMembership,
 	updateProfile,
@@ -30,6 +32,7 @@ const uplod = multer({
 	limits: { fileSize: 1 * 1024 * 1024 }, // 限制文件大小为 1MB
 })
 router.get("/getMe", protect, getUser)
+router.get("/getMembershipRelease", protect, getUserRelease)
 router.route("/membership").get(protect, getUserAllMembership)
 router.route("/membership/check").get(protect, checkUserMembershipActive)
 router.route("/membership/active").get(protect, getMembershipActive)
@@ -39,5 +42,6 @@ router.post("/uploadAvatar", protect, uplod.single("avatar"), uploadAvatar)
 router.post("/findUserByName", protect, findUserByName)
 router.post("/transferMembership", protect, transferMembership)
 router.post("/requestMembership", protect, requestMembership)
+router.post("/releaseMembership", protect, releaseMembership)
 
 export default router

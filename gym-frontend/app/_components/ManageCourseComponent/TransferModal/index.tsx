@@ -22,7 +22,7 @@ interface TransferModalProps {
 export default function TransferModal(props: TransferModalProps) {
 	const { address } = useAccount()
 	const [newOwener, setNewOwener] = useState({
-		userimgae: "",
+		userimage: "",
 		username: "",
 		address: "",
 	})
@@ -126,7 +126,7 @@ export default function TransferModal(props: TransferModalProps) {
 													return toast.error("不能转让给自己")
 												}
 												setNewOwener({
-													userimgae: item.userimgae,
+													userimage: item.userimage,
 													username: item.username,
 													address: item.address,
 												})
@@ -154,7 +154,7 @@ export default function TransferModal(props: TransferModalProps) {
 												>
 													<Avatar
 														src={
-															item.userimgae ? item.userimgae : blo(item.address as `0x${string}`)
+															item.userimage ? item.userimage : blo(item.address as `0x${string}`)
 														}
 														alt="avatar"
 														size={30}
@@ -202,8 +202,8 @@ export default function TransferModal(props: TransferModalProps) {
 						>
 							<Avatar
 								src={
-									newOwener.userimgae
-										? newOwener.userimgae
+									newOwener.userimage
+										? newOwener.userimage
 										: blo(newOwener.address as `0x${string}`)
 								}
 								alt="avatar"

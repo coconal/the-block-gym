@@ -42,7 +42,7 @@ export default function SettingPageComponent() {
 			form.resetFields()
 			form.setFieldsValue({
 				username: data.data?.username,
-				avatar: data.data?.userimgae,
+				avatar: data.data?.userimage,
 			})
 		},
 		onError: (error) => {
@@ -54,7 +54,7 @@ export default function SettingPageComponent() {
 		if (userData) {
 			form.setFieldsValue({
 				username: userData.username,
-				avatar: userData.userimgae,
+				avatar: userData.userimage,
 			})
 		}
 	}, [userData, form])
@@ -72,7 +72,7 @@ export default function SettingPageComponent() {
 						layout="vertical"
 						initialValues={{
 							username: userData?.username,
-							avatar: userData?.userimgae,
+							avatar: userData?.userimage,
 						}}
 						onFinish={mutate.mutate}
 					>
@@ -85,8 +85,8 @@ export default function SettingPageComponent() {
 										height: "40px",
 									}}
 								>
-									{userData?.userimgae ? (
-										<Avatar size={40} src={userData?.userimgae} />
+									{userData?.userimage ? (
+										<Avatar size={40} src={userData?.userimage} />
 									) : (
 										<Avatar size={40} src={blo(userData?.address as `0x${string}`)} />
 									)}
@@ -136,7 +136,7 @@ export default function SettingPageComponent() {
 											toast.error("头像上传失败")
 											onError?.(new Error("上传失败"))
 											console.error("上传错误:", error)
-											// form.setFieldValue("avatar", userData?.userimgae || "")
+											// form.setFieldValue("avatar", userData?.userimage || "")
 										}
 									}}
 									onChange={(info) => {

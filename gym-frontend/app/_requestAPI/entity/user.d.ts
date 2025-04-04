@@ -10,7 +10,7 @@ declare global {
 			declare type UserEntity = {
 				_id: string
 				__v: number
-				userimgae: string
+				userimage: string
 				address: string
 				role: "user" | "coach" | "admin"
 				verifiedHash: string
@@ -35,6 +35,9 @@ declare global {
 			declare type CheckUserHaveCourseResponse = {
 				data: MembershipEntity[]
 				message: string
+			}
+			declare type GetMembershipReleaseResponse = {
+				data: API.UserMembership.Membership[]
 			}
 			declare type logOutResponse = {
 				success: boolean

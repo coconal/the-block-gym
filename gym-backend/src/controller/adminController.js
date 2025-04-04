@@ -74,3 +74,5 @@ export const updateCourse = async (req, res) => {
 		res.status(500).json({ error: "Internal server error" })
 	}
 }
+
+export const getAllUserReleasedAmount = async (req, res) => {}

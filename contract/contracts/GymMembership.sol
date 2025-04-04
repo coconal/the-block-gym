@@ -32,10 +32,6 @@ contract GymMembership is ReentrancyGuard, Ownable {
 
     // 用户地址 => 会员信息
     mapping(address => Membership[]) public memberships;
-    // 教练地址 => 可提取收益
-    mapping(address => uint256) public coachEarnings;
-    // 教练是否验证
-    mapping(address => bool) public verifiedCoaches;
     // 用户信息
     mapping(address => Profile) public users;
     // 用户上次退款时间
@@ -93,15 +89,6 @@ contract GymMembership is ReentrancyGuard, Ownable {
             isActive: true
         });
         emit UserRegistered(userAddress, _userType);
-    }
-
-    function verifiedCoach(
-        address coachAddress,
-        string memory ipfsCertHash
-    ) external onlyOwner {
-        require(bytes(ipfsCertHash).length == 46, "Invalid IPFS hash");
-        verifiedCoaches[coachAddress] = true;
-        emit CoachIsVerified(coachAddress, ipfsCertHash);
     }
 
     function getMembershipLength(

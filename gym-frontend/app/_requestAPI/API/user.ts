@@ -67,3 +67,19 @@ export const requestMembership = async (params: API.User.RequestMembershipParams
 	) // ignore_security_alert_wait_for_fix SSRF
 	return res
 }
+
+export const getMembershipRelease = async () => {
+	const res = await axiosInstance.get<API.User.GetMembershipReleaseResponse>(
+		`/user/getMembershipRelease`
+	)
+	return res
+}
+
+export const releaseMembership = async (params: {
+	courseId: string
+	index: number
+	verifiedHash: string
+}) => {
+	const res = await axiosInstance.post<{ message: string }>(`/user/releaseMembership`, params)
+	return res
+}

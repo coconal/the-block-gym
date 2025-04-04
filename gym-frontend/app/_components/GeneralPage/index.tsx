@@ -92,7 +92,7 @@ const optionhistogram = {
 		axisPointer: {
 			type: "shadow",
 		},
-		formatter: (params) => {
+		formatter: (params: { value: number; name: string }[]) => {
 			const { value, name } = params[0]
 			return `${name}<br/>注册人数: ${value}`
 		},

@@ -10,6 +10,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"
 import CheckIcon from "@mui/icons-material/Check"
 import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined"
 import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded"
+import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange"
 import BarChartIcon from "@mui/icons-material/BarChart"
 import { Button, Modal, Skeleton } from "antd"
 import Link from "next/link"
@@ -26,7 +27,7 @@ interface ILayoutProps {
 }
 const data = [
 	{ name: "General", zh: "总体情况", icon: <BarChartIcon />, role: ["admin"] },
-	{ name: "Booking", zh: "预定", icon: <InboxIcon />, role: ["user"] },
+	{ name: "Booking", zh: "预定", icon: <InboxIcon />, role: ["user", "coach"] },
 	{ name: "Check", zh: "查看", icon: <CheckIcon />, role: ["user", "coach"] },
 	{ name: "Schedule", zh: "日程规划", icon: <CalendarMonthIcon />, role: ["user", "coach"] },
 	{
@@ -36,6 +37,7 @@ const data = [
 		role: ["user", "admin", "coach"],
 	},
 	{ name: "ManageUser", zh: "管理用户", icon: <ManageAccountsRoundedIcon />, role: ["admin"] },
+	{ name: "Release", zh: "获取收益", icon: <CurrencyExchangeIcon />, role: ["admin", "coach"] },
 	{ name: "Settings", zh: "设置", icon: <SettingsIcon />, role: ["user", "admin", "coach"] },
 ]
 export default function LayoutSider(props: ILayoutProps) {

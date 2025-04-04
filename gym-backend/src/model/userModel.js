@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
 		required: true,
 		default: "0x0",
 	},
-	userimgae: {
+	userimage: {
 		type: String,
 		default: "",
 	},
