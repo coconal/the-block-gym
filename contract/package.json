@@ -3,7 +3,7 @@
   "scripts": {
     "compile": "npx hardhat compile",
     "test": "npx hardhat test",
-    "init": "npx hardhat run scripts/seed.js --network localhost"
+    "init": "npx hardhat run scripts/ganache-seed.js --network ganache"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0T.0",
