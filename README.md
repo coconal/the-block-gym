@@ -18,7 +18,7 @@ npm install
 智能合约:
 
 ```bash
-cd gym-contract
+cd contract
 npm install
 ```
 
@@ -146,7 +146,7 @@ gym-backend: 后端项目
 |  ├─contract 智能合约ABI
 ```
 
-gym-contract: 智能合约项目
+contract: 智能合约项目
 
 ```bash
 ├─.gitignore
