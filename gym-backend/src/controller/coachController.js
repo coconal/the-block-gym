@@ -22,57 +22,6 @@ export const getCoachProfile = async (req, res) => {
 	}
 }
 
-export const getVerifiedCoachHash = (req, res) => {
-	try {
-		const { useraddress } = req.params
-
-		const result = contract.read.getVerifiedCoachHash([useraddress])
-		// TODO
-		// get data from db
-
-		const data = {
-			verified: result[0],
-			hash: result[1],
-		}
-		res.status(200).json({
-			data,
-		})
-	} catch (error) {
-		console.error("server error:", error)
-		res.status(500).json({ error: "Internal server error" })
-	}
-}
-
-export const getEarnings = async (req, res) => {
-	try {
-		const { address } = req.user
-		// 验证签名
-		const result = await contract.read.coachEarnings([address])
-
-		res.status(200).json({
-			data: JSONbig.parse(result),
-		})
-	} catch (error) {
-		console.error("server error:", error)
-		res.status(500).json({ error: "Internal server error" })
-	}
-}
-
-export const verifyCoach = async (req, res) => {
-	try {
-		const { address, CID } = req.user
-		// 验证签名
-		const result = await contract.write.verifyCoach([address, CID])
-
-		res.status(200).json({
-			data: "ok",
-		})
-	} catch (error) {
-		console.error("server error:", error)
-		res.status(500).json({ error: "Internal server error" })
-	}
-}
-
 export const releaseFunds = async (req, res) => {
 	try {
 		const { address } = req.user
@@ -88,3 +37,6 @@ export const releaseFunds = async (req, res) => {
 		res.status(500).json({ error: "Internal server error" })
 	}
 }
+
+//TODO
+// 获取 schedule 教练的所有课程

@@ -4,11 +4,10 @@ import { wagmiContractConfig } from "@/contract/gymMembership"
 import "./index.scss"
 import { getMembershipRelease, releaseMembership } from "@/app/_requestAPI/API/user"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { Button, Card, Col, Modal, Pagination, Row, Skeleton, Tag } from "antd"
+import { Button, Card, Col, Empty, Modal, Pagination, Row, Skeleton, Tag } from "antd"
 import { useState } from "react"
 import { useReadContract, useWriteContract } from "wagmi"
 import React from "react"
-import { parseEther } from "viem"
 import toast from "react-hot-toast"
 
 const cardStyle: React.CSSProperties = {
@@ -77,6 +76,7 @@ export default function ReleasePageComponent() {
 		if (value === undefined) return "0"
 		return (Number(value) / 1e18).toFixed(4) + " ETH" // 假设是18位小数
 	}
+	if (data?.data?.length === 0) return <Empty />
 	return (
 		<div
 			style={{

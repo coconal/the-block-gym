@@ -1,4 +1,4 @@
-import CourseSchema from "../model/coursesModel.js"
+import Courses from "../model/coursesModel.js"
 
 export const setPlatformFee = async (req, res) => {
 	const { fee } = req.body
@@ -16,7 +16,7 @@ export const setPlatformFee = async (req, res) => {
 export const createCourse = async (req, res) => {
 	const { coursetype, description, price, caoachAddress, duration, discount } = req.body
 	try {
-		const result = await CourseSchema.create({
+		const result = await Courses.create({
 			coursetype,
 			description,
 			price,
@@ -27,7 +27,7 @@ export const createCourse = async (req, res) => {
 		if (result) {
 			res.status(200).json({
 				data: "ok",
-				message: "CourseSchemacreated successfully",
+				message: "Coursescreated successfully",
 			})
 		} else {
 			res.status(400).json({
@@ -36,7 +36,7 @@ export const createCourse = async (req, res) => {
 			})
 		}
 	} catch (error) {
-		console.error("Create CourseSchemaerror:", error)
+		console.error("Create Courseserror:", error)
 		res.status(500).json({ error: "Internal server error" })
 	}
 }
@@ -57,7 +57,7 @@ export const updateCourse = async (req, res) => {
 	console.log(_coursemembershipId, updateData)
 
 	try {
-		const result = await CourseSchema.findByIdAndUpdate(_coursemembershipId, updateData)
+		const result = await Courses.findByIdAndUpdate(_coursemembershipId, updateData)
 		if (result) {
 			res.status(200).json({
 				data: "ok",
