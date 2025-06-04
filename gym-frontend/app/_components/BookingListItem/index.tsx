@@ -62,7 +62,7 @@ export default function BookingListItem(props: IBookingListItem) {
 			}
 			queryClient.invalidateQueries({ queryKey: ["memberships"] })
 			queryClient.invalidateQueries({ queryKey: ["getUserSchedule"] })
-			toast.success(data.message, {
+			toast.success("购买成功", {
 				duration: 5000,
 			})
 		},
@@ -142,7 +142,7 @@ export default function BookingListItem(props: IBookingListItem) {
 									{item.coachAddress}
 								</Link>
 							</div>
-							{item.description} {item.price}ETH---{item.duration}d
+							{item.description} {item.price}ETH---{item.duration}天
 						</div>
 					}
 				/>

@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema({
 		type: Number,
 		default: 0,
 	},
+	awards: {
+		type: [Number],
+		default: [],
+	},
 })
 
 const User = mongoose.model("users", userSchema)

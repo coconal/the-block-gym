@@ -44,7 +44,7 @@ function Page() {
 							gap: "10px",
 						}}
 					>
-						Welcome The Block Gym
+						欢迎来到
 						<LinkButton href="/dashboard" />
 					</div>
 				</div>

@@ -2,6 +2,7 @@ import { createPublicClient, createWalletClient, getContract, http } from "viem"
 import { privateKeyToAccount } from "viem/accounts"
 import { mainnet, hardhat } from "viem/chains"
 import { ContractConfig } from "../contract/gymMembership.js"
+import { AwardContractConfig } from "../contract/RewardManager.js"
 import JSONbig from "json-bigint"
 import dotenv from "dotenv"
 dotenv.config()
@@ -23,4 +24,9 @@ const contract = getContract({
 	client: { public: publicClient, wallet: walletClient },
 })
 
-export { publicClient, contract, JWT_SECRET, JSONbig }
+const awardContract = getContract({
+	...AwardContractConfig,
+	client: { public: publicClient, wallet: walletClient },
+})
+
+export { publicClient, contract, awardContract, JWT_SECRET, JSONbig }

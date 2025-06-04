@@ -45,6 +45,8 @@ export const getUser = async (req, res) => {
 				role: data.role,
 				verifiedHash: data.verifiedHash,
 				userimage: data.userimage,
+				points: data.points,
+				awards: data.awards,
 			},
 			message: "find user successfully",
 		})

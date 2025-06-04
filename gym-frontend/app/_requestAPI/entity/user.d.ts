@@ -15,6 +15,8 @@ declare global {
 				role: "user" | "coach" | "admin"
 				verifiedHash: string
 				username: string
+				points: number
+				awards: number[]
 			}
 
 			declare type PurchaseParams = {

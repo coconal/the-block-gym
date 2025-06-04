@@ -59,12 +59,12 @@ export default function SignupForm() {
 			onFinish={onFinish}
 		>
 			<Form.Item<SignUpFormType>
-				label="Username"
+				label="用户名"
 				name="username"
 				rules={[
 					{
 						required: true,
-						message: <span className="error-message">Please input your username!</span>,
+						message: <span className="error-message">请输入你的用户名!</span>,
 					},
 				]}
 			>
@@ -72,18 +72,18 @@ export default function SignupForm() {
 			</Form.Item>
 
 			<Form.Item<SignUpFormType>
-				label="Usertype"
+				label="用户类型"
 				name="role"
 				rules={[
 					{
 						required: true,
-						message: <span className="error-message">Please select your usertype!</span>,
+						message: <span className="error-message">请选择用户类型!</span>,
 					},
 				]}
 			>
-				<Select style={{ color: "#2d3436" }} placeholder="Select  your role" allowClear>
-					<Option value="user">user</Option>
-					<Option value="coach">coach</Option>
+				<Select style={{ color: "#2d3436" }} placeholder="选择你的用户类型" allowClear>
+					<Option value="user">用户</Option>
+					<Option value="coach">教练</Option>
 				</Select>
 			</Form.Item>
 

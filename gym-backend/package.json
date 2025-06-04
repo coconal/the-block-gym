@@ -10,7 +10,8 @@
     "script:insertCourses": "node ./src/scripts/insertCourses.js",
     "script:insertUserMembership": "node ./src/scripts/insertUserMembership.js",
     "script:insertCoursePlan": "node ./src/scripts/insertCoursePlan.js",
-    "script:insertSchedules": "node ./src/scripts/insertSchedules.js"
+    "script:insertSchedules": "node ./src/scripts/insertSchedules.js",
+    "script:insertAwards": "node ./src/scripts/insertAwards.js"
   },
   "author": "",
   "license": "ISC",

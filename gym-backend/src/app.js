@@ -9,6 +9,7 @@ import userRouter from "./routes/userRoute.js"
 import coachRouter from "./routes/coachRoute.js"
 import adminRouter from "./routes/adminRoute.js"
 import coursesRouter from "./routes/courseRoute.js"
+import awardRouter from "./routes/awardRoute.js"
 import shceduleRouter from "./routes/scheduleRoute.js"
 dotenv.config()
 
@@ -31,6 +32,7 @@ app.use("/api/coach", coachRouter)
 app.use("/api/admin", adminRouter)
 app.use("/api/courses", coursesRouter)
 app.use("/api/schedule", shceduleRouter)
+app.use("/api/award", awardRouter)
 
 mongoose.connect(DB).then(() => {
 	// console.log(con.connections);

@@ -56,10 +56,10 @@ export default function MapSideBar(props: MapSideBar) {
 						}}
 					>
 						{activeMarkerIndex === null ? (
-							<h4>select a marker to view details</h4>
+							<h4>选择标记点来获取更多信息</h4>
 						) : (
 							<>
-								<div>Active marker: {locationInitial[activeMarkerIndex].title}</div>
+								<div>当前标记点: {locationInitial[activeMarkerIndex].title}</div>
 								{locationInitial[activeMarkerIndex].desription.split("-").map((item, index) => {
 									return <div key={index}>{item}</div>
 								})}

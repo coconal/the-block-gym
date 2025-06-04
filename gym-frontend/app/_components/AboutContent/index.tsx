@@ -12,7 +12,7 @@ export default function About() {
 			<Row gutter={[48, 30]} align="middle" justify={"space-between"}>
 				<Col span={14}>
 					<div className="p-content">
-						<h1>Welcome to The Block Gym</h1>
+						<h1>欢迎来到区块健身社区</h1>
 						<Row style={{ marginTop: "32px" }} gutter={[24, 32]}>
 							<Col>
 								<p>
@@ -92,7 +92,7 @@ export default function About() {
 					</Card>
 					<Link href="/dashboard">
 						<Card hoverable style={{ width: "100px", height: "100%" }}>
-							<Meta title="more" description=" ......" />
+							<Meta title="更多" description=" ......" />
 						</Card>
 					</Link>
 				</Flex>

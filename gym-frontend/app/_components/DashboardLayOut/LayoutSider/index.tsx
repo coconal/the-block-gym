@@ -19,6 +19,7 @@ import { useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { logout } from "@/app/_requestAPI/API/user"
 import toast from "react-hot-toast"
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
 import { useGetUser } from "@/app/hooks/useGetUser"
 import UserType from "./UserType"
 
@@ -39,6 +40,7 @@ const data = [
 	{ name: "ManageUser", zh: "管理用户", icon: <ManageAccountsRoundedIcon />, role: ["admin"] },
 	{ name: "Release", zh: "获取收益", icon: <CurrencyExchangeIcon />, role: ["admin", "coach"] },
 	{ name: "Settings", zh: "设置", icon: <SettingsIcon />, role: ["user", "admin", "coach"] },
+	{ name: "Award", zh: "兑换奖励", icon: <EmojiEventsIcon />, role: ["user", "coach"] },
 ]
 export default function LayoutSider(props: ILayoutProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false)

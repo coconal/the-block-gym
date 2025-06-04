@@ -1,0 +1,58 @@
+[
+    {
+        "name": "比心小人",
+        "index": 0,
+        "description": "一个比心小人",
+        "image": "",
+        "points": "200"
+    },
+    {
+        "name": "馒头小人",
+        "index": 1,
+        "description": "一个馒头小人",
+        "image": "",
+        "points": "200"
+    },
+    {
+        "name": "举手小人",
+        "index": 2,
+        "description": "一个举手小人",
+        "image": "",
+        "points": "200"
+    },
+    {
+        "name": "健身奖牌",
+        "index": 3,
+        "description": "对应健身新人的奖励,一个普通的奖牌,坚持每天健身即可获得",
+        "image": "",
+        "points": "300"
+    },
+    {
+        "name": "花纹奖牌",
+        "index": 4,
+        "description": "一个花纹奖牌,坚持健身即可获得",
+        "image": "",
+        "points": "799"
+    },
+    {
+        "name": "金色花纹奖牌",
+        "index": 5,
+        "description": "一个金色花纹奖牌,坚持健身即可获得",
+        "image": "",
+        "points": "1499"
+    },
+    {
+        "name": "健身奖杯",
+        "index": 6,
+        "description": "一个银色奖杯,坚持健身即可获得",
+        "image": "",
+        "points": "5499"
+    },
+    {
+        "name": "终极奖杯",
+        "index": 7,
+        "description": "一个金色奖杯,是对自己锻炼的肯定",
+        "image": "",
+        "points": "9999"
+    }
+]

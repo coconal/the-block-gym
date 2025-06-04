@@ -133,7 +133,7 @@ export default function LoginForm() {
 							}}
 							onClick={() => loginMutation.mutate()}
 						>
-							Login with wallet signature
+							使用签名登录
 						</Button>
 					</Flex>
 					<Notifaction

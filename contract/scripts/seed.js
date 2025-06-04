@@ -175,13 +175,17 @@ async function main() {
 	console.log(
 		"过期时间：",
 		new Date(
-			(Number(membershipData.startTime) + Number(membershipData.duration) * 24 * 60 * 60) * 1000
+			(Number(membershipData.startTime) + Number(membershipData.duration)) * 1000
 		).toLocaleString()
 	)
 
 	currentTimestamp = await setCurrentTime()
 	const nowblock = await ethers.provider.getBlock("latest")
 	console.log("当前时间:", new Date(nowblock.timestamp * 1000).toLocaleString())
+
+	const award = await ethers.getContractFactory("RewardManager")
+	const reward = await award.deploy(membership.target, admin.address)
+	console.log("合约地址:", reward.target)
 }
 
 main().catch((error) => {
